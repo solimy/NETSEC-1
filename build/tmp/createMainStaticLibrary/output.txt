@@ -1,0 +1,4 @@
+See file:///home/daures_h/github/NETSEC-1/build/tmp/createMainStaticLibrary/output.txt for all output for createMainStaticLibrary.
+archiving libmain.a successful.
+
+Finished createMainStaticLibrary, see full log file:///home/daures_h/github/NETSEC-1/build/tmp/createMainStaticLibrary/output.txt.

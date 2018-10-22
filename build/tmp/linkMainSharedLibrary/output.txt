@@ -1,0 +1,4 @@
+See file:///home/daures_h/github/NETSEC-1/build/tmp/linkMainSharedLibrary/output.txt for all output for linkMainSharedLibrary.
+linking libmain.so successful.
+
+Finished linkMainSharedLibrary, see full log file:///home/daures_h/github/NETSEC-1/build/tmp/linkMainSharedLibrary/output.txt.

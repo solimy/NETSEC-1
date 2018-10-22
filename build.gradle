@@ -1,0 +1,26 @@
+plugins {
+	id 'cpp'
+	id 'native-component'
+}
+
+model {
+    components {
+        main(NativeLibrarySpec) {
+			binaries.all {
+				cppCompiler.args "-std=c++11"    
+			}
+            sources {
+                cpp {
+                    source {
+                        srcDirs "src/main/cpp"//, "src/shared/c++"
+                        include "**/*.cpp"
+                    }
+                    exportedHeaders {
+                        srcDirs "src/main/cpp"//, "src/shared/include"
+                        include "**/*.hh"
+                    }
+                }
+            }
+        }
+    }
+}
