@@ -10,4 +10,16 @@ c++
 /home/hdaures/github/NETSEC-1/src/main/cpp/ui/panel
 -I
 /home/hdaures/github/NETSEC-1/src/main/cpp/ui/window
+-I
+/home/hdaures/github/NETSEC-1/src/main/cpp/ui/dislplayableelement
+-I
+/home/hdaures/github/NETSEC-1/src/main/cpp/network
+-I
+/home/hdaures/github/NETSEC-1/src/main/cpp/network/PcapPacketManager
+-I
+/home/hdaures/github/NETSEC-1/src/main/cpp/network/PcapFeedable
+-I
+/home/hdaures/github/NETSEC-1/src/main/cpp/network/PcapPacket
+-I
+/home/hdaures/github/NETSEC-1/src/main/cpp/network/PcapFile
 -m64

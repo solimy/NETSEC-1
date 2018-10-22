@@ -3,4 +3,6 @@
 /home/hdaures/github/NETSEC-1/build/objs/main/mainCpp/aehprpweayu48amwu7lkf9krc/Main.o
 /home/hdaures/github/NETSEC-1/build/objs/main/mainCpp/3bjspyg6iuun75ojmqay8a1ar/Panel.o
 /home/hdaures/github/NETSEC-1/build/objs/main/mainCpp/3y69bi3fii2nligc1me1vqvh/Window.o
+/home/hdaures/github/NETSEC-1/build/objs/main/mainCpp/1dq3fv4nnjlor382npmqqnwdq/DisplayableElement.o
+/home/hdaures/github/NETSEC-1/build/objs/main/mainCpp/b7unw3e49fs89au9xp4fjdgwm/PcapPacketManager.o
 -m64

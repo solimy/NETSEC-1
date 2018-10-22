@@ -7,7 +7,7 @@ model {
     components {
         main(NativeExecutableSpec) {
 			binaries.all {
-				cppCompiler.args "-std=c++11"    
+				cppCompiler.args "-std=c++11"
 			}
             sources {
                    cpp {
