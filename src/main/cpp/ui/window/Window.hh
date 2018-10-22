@@ -4,7 +4,8 @@
 namespace NETSEC_UI {
 
 	class Window {
-
+	public:
+	  Window();
 	};
 
 }

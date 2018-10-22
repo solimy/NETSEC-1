@@ -1,6 +1,0 @@
-See file:///home/daures_h/github/NETSEC-1/build/tmp/compileMainSharedLibraryMainCpp/output.txt for all output for compileMainSharedLibraryMainCpp.
-compiling Main.cpp failed.
-/home/daures_h/github/NETSEC-1/src/main/cpp/Main.cpp:10:21: fatal error: Window.hh: Aucun fichier ou dossier de ce type
-compilation terminated.
-
-Finished compileMainSharedLibraryMainCpp, see full log file:///home/daures_h/github/NETSEC-1/build/tmp/compileMainSharedLibraryMainCpp/output.txt.

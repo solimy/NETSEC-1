@@ -1,8 +1,6 @@
 -o
-/home/daures_h/github/NETSEC-1/build/exe/main/main
-/home/daures_h/github/NETSEC-1/build/objs/main/mainCpp/9r7m9vdz3gjty2aytck77cf7p/Window.o
-/home/daures_h/github/NETSEC-1/build/objs/main/mainCpp/awo0jgnufg5l0p0vfgghp9dvb/Main.o
-/home/daures_h/github/NETSEC-1/build/objs/main/mainCpp/9kzklu7ix15ij9zlo7w58laj1/Panel.o
-/home/daures_h/github/NETSEC-1/build/objs/main/mainCpp/5n0sry3touks4975f4z4d6ta0/Window.o
-/home/daures_h/github/NETSEC-1/build/objs/main/mainCpp/bhfuyg1ck96pwb0fc7w2qhdg7/Panel.o
+/home/hdaures/github/NETSEC-1/build/exe/main/main
+/home/hdaures/github/NETSEC-1/build/objs/main/mainCpp/aehprpweayu48amwu7lkf9krc/Main.o
+/home/hdaures/github/NETSEC-1/build/objs/main/mainCpp/3bjspyg6iuun75ojmqay8a1ar/Panel.o
+/home/hdaures/github/NETSEC-1/build/objs/main/mainCpp/3y69bi3fii2nligc1me1vqvh/Window.o
 -m64

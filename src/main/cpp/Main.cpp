@@ -6,7 +6,7 @@
  */
 
 
-#include "./ui/panel/Panel.hh"
+#include "Panel.hh"
 #include "Window.hh"
 
 

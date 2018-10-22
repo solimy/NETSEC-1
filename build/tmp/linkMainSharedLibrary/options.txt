@@ -1,8 +1,0 @@
--shared
--Wl,-soname,libmain.so
--o
-/home/daures_h/github/NETSEC-1/build/libs/main/shared/libmain.so
-/home/daures_h/github/NETSEC-1/build/objs/main/shared/mainCpp/awo0jgnufg5l0p0vfgghp9dvb/Main.o
-/home/daures_h/github/NETSEC-1/build/objs/main/shared/mainCpp/9kzklu7ix15ij9zlo7w58laj1/Panel.o
-/home/daures_h/github/NETSEC-1/build/objs/main/shared/mainCpp/5n0sry3touks4975f4z4d6ta0/Window.o
--m64
