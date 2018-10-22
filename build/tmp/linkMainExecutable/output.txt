@@ -1,4 +1,7 @@
 See file:///home/hdaures/github/NETSEC-1/build/tmp/linkMainExecutable/output.txt for all output for linkMainExecutable.
-linking main successful.
+linking main failed.
+/home/hdaures/github/NETSEC-1/build/objs/main/mainCpp/3y69bi3fii2nligc1me1vqvh/Window.o : Dans la fonction « NETSEC_UI::Window::Window() » :
+Window.cpp:(.text+0x1f) : référence indéfinie vers « vtable for NETSEC_UI::Window »
+collect2: erreur: ld a retourné 1 code d'état d'exécution
 
 Finished linkMainExecutable, see full log file:///home/hdaures/github/NETSEC-1/build/tmp/linkMainExecutable/output.txt.

@@ -15,11 +15,11 @@ c++
 -I
 /home/hdaures/github/NETSEC-1/src/main/cpp/network
 -I
-/home/hdaures/github/NETSEC-1/src/main/cpp/network/PcapPacketManager
+/home/hdaures/github/NETSEC-1/src/main/cpp/network/pcapfeedable
 -I
-/home/hdaures/github/NETSEC-1/src/main/cpp/network/PcapFeedable
+/home/hdaures/github/NETSEC-1/src/main/cpp/network/pcapfile
 -I
-/home/hdaures/github/NETSEC-1/src/main/cpp/network/PcapPacket
+/home/hdaures/github/NETSEC-1/src/main/cpp/network/pcappacket
 -I
-/home/hdaures/github/NETSEC-1/src/main/cpp/network/PcapFile
+/home/hdaures/github/NETSEC-1/src/main/cpp/network/pcappacketmanager
 -m64

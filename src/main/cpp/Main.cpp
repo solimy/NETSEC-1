@@ -14,7 +14,7 @@
 
 int main(int ac, char** av) {
   NETSEC_UI::Window window;
-  NETSEC_NETWORK::PcapPacketManager ppm(&window);
+  NETSEC_NETWORK::PcapPacketManager ppm(NULL);
   while (42) {
     ppm.process();
     usleep(100);
