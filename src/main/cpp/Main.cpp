@@ -13,7 +13,8 @@
 #include "PcapPacketManager.hh"
 
 int main(int ac, char** av) {
-  NETSEC_NETWORK::PcapPacketManager ppm(NULL);
+  NETSEC_UI::Window window;
+  NETSEC_NETWORK::PcapPacketManager ppm(&window);
   while (42) {
     ppm.process();
     usleep(100);
