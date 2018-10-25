@@ -28,14 +28,16 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     pcapfeeder.cpp \
-    packetreader.cpp
+    packetreader.cpp \
+    packetwriter.cpp
 
 HEADERS += \
         mainwindow.h \
     pcappacket.h \
     protocolenum.h \
     pcapfeeder.h \
-    packetreader.h
+    packetreader.h \
+    packetwriter.h
 
 FORMS += \
         mainwindow.ui

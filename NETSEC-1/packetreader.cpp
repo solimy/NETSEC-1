@@ -4,12 +4,20 @@
 
 PacketReader::PacketReader()
 {
+    running = false;
+    routine = nullptr;
+}
+
+PacketReader::~PacketReader()
+{
+    stopCapture();
 }
 
 void PacketReader::startCapture() {
+    stopCapture();
     std::lock_guard<std::mutex> lock(routineSafety);
+    running = false;
     if (routine != nullptr) {
-        running = false;
         routine->join();
         delete routine;
     }
@@ -18,19 +26,20 @@ void PacketReader::startCapture() {
 }
 
 void PacketReader::startCapture(std::string const& file) {
+    stopCapture();
     std::lock_guard<std::mutex> lock(routineSafety);
-    if (routine != nullptr) {
-        running = false;
-        routine->join();
-        delete routine;
-    }
     running = true;
     routine = new std::thread(&PacketReader::captureFromFile, this, file);
 }
 
+//TODO close(socket) !!
 void PacketReader::stopCapture() {
     std::lock_guard<std::mutex> lock(routineSafety);
     running = false;
+    if (routine != nullptr) {
+        routine->join();
+        delete routine;
+    }
 }
 
 //TODO

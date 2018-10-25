@@ -3,6 +3,7 @@
 
 #include <thread>
 #include <string>
+#include <atomic>
 
 #include "pcapfeeder.h"
 
@@ -10,6 +11,7 @@ class PacketReader : public PcapFeeder
 {
 public:
     PacketReader();
+    ~PacketReader();
 
     /**
      * @brief startCapture
@@ -33,8 +35,8 @@ public:
 
 private:
     std::mutex routineSafety;
-    bool running = false;
-    std::thread* routine = nullptr;
+    std::atomic_bool running;
+    std::thread* routine;
 
     /**
      * @brief captureFromNetwork
