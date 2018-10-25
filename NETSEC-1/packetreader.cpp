@@ -1,23 +1,31 @@
 #include "packetreader.h"
 
+#include <iostream>
+
 PacketReader::PacketReader()
 {
 }
 
 void PacketReader::startCapture() {
     std::lock_guard<std::mutex> lock(routineSafety);
-    if (routine == nullptr) {
-        running = true;
-        routine = new std::thread(&PacketReader::captureFromNetwork, this);
+    if (routine != nullptr) {
+        running = false;
+        routine->join();
+        delete routine;
     }
+    running = true;
+    routine = new std::thread(&PacketReader::captureFromNetwork, this);
 }
 
 void PacketReader::startCapture(std::string const& file) {
     std::lock_guard<std::mutex> lock(routineSafety);
-    if (routine == nullptr) {
-        running = true;
-        routine = new std::thread(&PacketReader::captureFromFile, this, file);
+    if (routine != nullptr) {
+        running = false;
+        routine->join();
+        delete routine;
     }
+    running = true;
+    routine = new std::thread(&PacketReader::captureFromFile, this, file);
 }
 
 void PacketReader::stopCapture() {
@@ -25,10 +33,20 @@ void PacketReader::stopCapture() {
     running = false;
 }
 
-void PacketReader::captureFromFile(std::string const& file) {
 //TODO
+void PacketReader::captureFromFile(std::string const& file) {
+    while (running == true) {
+        PcapPacket* packet = nullptr;
+        std::cout << "capturing from file(\"" << file << "\") !!" << std::endl;
+        feedSubscribers(packet);
+    }
 }
 
-void PacketReader::captureFromNetwork() {
 //TODO
+void PacketReader::captureFromNetwork() {
+    while (running == true) {
+        PcapPacket* packet = nullptr;
+        std::cout << "capturing from network !!" << std::endl;
+        feedSubscribers(packet);
+    }
 }

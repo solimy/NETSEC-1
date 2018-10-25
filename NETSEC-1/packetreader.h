@@ -6,7 +6,7 @@
 
 #include "pcapfeeder.h"
 
-class PacketReader : private PcapFeeder
+class PacketReader : public PcapFeeder
 {
 public:
     PacketReader();

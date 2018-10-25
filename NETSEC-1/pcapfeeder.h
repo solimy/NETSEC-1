@@ -12,13 +12,12 @@ public:
         friend PcapFeeder;
     public:
         virtual ~PcapFeedable();
-
         /**
          * @brief feed
          * @param packet
          * @threadsafe
          */
-        virtual void feed(const PcapPacket* packet);
+        virtual void feed(const PcapPacket* packet)=0;
 
         /**
          * @brief subscribeToFeeder
@@ -33,6 +32,9 @@ public:
          * @threadsafe
          */
         void unsubscribeToFeeder(PcapFeeder* feeder);
+
+    protected:
+        PcapFeedable();
 
     private:
         std::mutex feedSafety;

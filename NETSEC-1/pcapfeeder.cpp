@@ -1,5 +1,11 @@
 #include "pcapfeeder.h"
 
+PcapFeeder::PcapFeedable::PcapFeedable() {
+}
+
+PcapFeeder::PcapFeedable::~PcapFeedable() {
+}
+
 void PcapFeeder::PcapFeedable::subscribeToFeeder(PcapFeeder* feeder) {
     feeder->subscribe(this);
 }
