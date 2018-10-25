@@ -26,10 +26,14 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    pcapfeeder.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    pcappacket.h \
+    protocolenum.h \
+    pcapfeeder.h
 
 FORMS += \
         mainwindow.ui

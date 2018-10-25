@@ -15,6 +15,9 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_toolButton_triggered(QAction *arg1);
+    
 private:
     Ui::MainWindow *ui;
 };
