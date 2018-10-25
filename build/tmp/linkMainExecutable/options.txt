@@ -1,9 +1,0 @@
--o
-/home/hdaures/github/NETSEC-1/build/exe/main/main
-/home/hdaures/github/NETSEC-1/build/objs/main/mainCpp/aehprpweayu48amwu7lkf9krc/Main.o
-/home/hdaures/github/NETSEC-1/build/objs/main/mainCpp/3bjspyg6iuun75ojmqay8a1ar/Panel.o
-/home/hdaures/github/NETSEC-1/build/objs/main/mainCpp/3y69bi3fii2nligc1me1vqvh/Window.o
-/home/hdaures/github/NETSEC-1/build/objs/main/mainCpp/1dq3fv4nnjlor382npmqqnwdq/DisplayableElement.o
-/home/hdaures/github/NETSEC-1/build/objs/main/mainCpp/4b90mz82am4f9b6ui6eftobe2/PcapFeedable.o
-/home/hdaures/github/NETSEC-1/build/objs/main/mainCpp/53p66w5f2ywcdtod7epa7bbss/PcapPacketManager.o
--m64

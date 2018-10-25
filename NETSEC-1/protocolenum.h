@@ -5,6 +5,7 @@ enum class ProtocolEnum : int {
     UNKNOWN__RAW,
     ETHERNET,
     ARP,
+    ICMP,
     IP,
     TCP,
     UDP,

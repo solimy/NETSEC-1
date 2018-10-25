@@ -1,8 +1,8 @@
 #ifndef PCAPFEEDER_H
 #define PCAPFEEDER_H
 
-#include "mutex"
-#include "unordered_set"
+#include <mutex>
+#include <unordered_set>
 
 #include "pcappacket.h"
 
@@ -13,25 +13,63 @@ public:
     public:
         virtual ~PcapFeedable();
 
-        /**///Thread safe
-        /**/virtual void feed(PcapPacket* packet);
-        /**/void subscribeToFeeder(PcapFeeder* feeder);
-        /**/void unsubscribeToFeeder(PcapFeeder* feeder);
+        /**
+         * @brief feed
+         * @param packet
+         * @threadsafe
+         */
+        virtual void feed(const PcapPacket* packet);
+
+        /**
+         * @brief subscribeToFeeder
+         * @param feeder
+         * @threadsafe
+         */
+        void subscribeToFeeder(PcapFeeder* feeder);
+
+        /**
+         * @brief unsubscribeToFeeder
+         * @param feeder
+         * @threadsafe
+         */
+        void unsubscribeToFeeder(PcapFeeder* feeder);
 
     private:
         std::mutex feedSafety;
 
+        /**
+         * @brief safeFeed
+         * @param packet
+         * @threadsafe
+         */
         void safeFeed(PcapPacket* packet);
     };
 
 protected:
+
+    /**
+     * @brief feedSubscribers
+     * @param packet
+     * @threadsafe
+     */
     void feedSubscribers(PcapPacket* packet);
 
 private:
     std::mutex subscribersSafety;
     std::unordered_set<PcapFeedable*> subscribers;
 
+    /**
+     * @brief subscribe
+     * @param feedable
+     * @threadsafe
+     */
     void subscribe(PcapFeedable* feedable);
+
+    /**
+     * @brief unsubscribe
+     * @param feedable
+     * @threadsafe
+     */
     void unsubscribe(PcapFeedable* feedable);
 };
 
