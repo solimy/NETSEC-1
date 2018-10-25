@@ -3,7 +3,6 @@
 
 #include <type_traits>
 #include <cstdint>
-#include <vector>
 
 #include "protocolenum.h"
 
@@ -23,18 +22,25 @@ public:
 
     class Factory {
     public:
-        static PcapPacket* buildEmpty();
+        static PcapPacket* buildEmpty(ProtocolEnum protocol);
         static PcapPacket* buildCopy(PcapPacket* toCopy);
         static PcapPacket* buildFromPcapBuffer(void* buffer);
-        static PcapPacket* buildFromRawBuffer(void* buffer);
+        static PcapPacket* buildFromRawBuffer(void* buffer, unsigned long length);
     };
+    friend Factory;
 
     virtual ~PcapPacket();
+
 
     uint32_t get_ts_sec() const;
     uint32_t get_ts_usec() const;
     uint32_t get_incl_len() const;
     uint32_t get_orig_len() const;
+    void set_ts_sec(uint32_t ts_sec);
+    void set_ts_usec(uint32_t ts_usec);
+    void set_incl_len(uint32_t incl_len);
+    void set_orig_len(uint32_t orig_len);
+
     ProtocolEnum getProtocol() const;
     const void* getBuffer_withPcapHeader() const;
     const void* getBuffer_withoutPcapHeader() const;
@@ -42,10 +48,11 @@ public:
     unsigned long getSize_withoutPcapHeader() const;
 
 protected:
-    PcapPacket(ProtocolEnum protocol);
+    PcapPacket(ProtocolEnum protocol, void* data);
 
 private:
     const ProtocolEnum protocol;
+    void* rawData;
     Data* data;
 };
 
