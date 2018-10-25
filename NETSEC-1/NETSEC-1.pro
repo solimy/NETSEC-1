@@ -29,7 +29,8 @@ SOURCES += \
         mainwindow.cpp \
     pcapfeeder.cpp \
     packetreader.cpp \
-    packetwriter.cpp
+    packetwriter.cpp \
+    pcappacket.cpp
 
 HEADERS += \
         mainwindow.h \

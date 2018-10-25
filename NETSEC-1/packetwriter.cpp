@@ -11,9 +11,14 @@ PacketWriter::~PacketWriter()
     stopWriting();
 }
 
+//TODO
 void PacketWriter::feed(const PcapPacket* packet) {
     if (socket > 0) {
-        write(socket, packet->getBuffer(), packet->getSize());
+
+        //TODO si fichier
+        write(socket, packet->getBuffer_withPcapHeader(), packet->getSize());
+        //TODO si network
+        write(socket, packet->getBuffer_withoutPcapHeader(), packet->getSize());
     }
 }
 
