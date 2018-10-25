@@ -99,10 +99,10 @@ PcapPacket* PcapPacket::Factory::buildFromPcapBuffer(void* buffer) {
     PcapPacket* packet = nullptr;
     pcaprec_hdr_t* pcapHeader = (pcaprec_hdr_t*)buffer;
 
-    if (pcapHeader->incl_len < sizeof (pcaprec_hdr_t) + sizeof (ethhdr)) {
-        packet = new PcapPacket(ProtocolEnum::UNKNOWN__RAW, buffer);
+    if (pcapHeader->incl_len >= sizeof (pcaprec_hdr_t) + sizeof (ethhdr)) {
+        packet = new PcapPacket(ProtocolEnum::ETHERNET, buffer);
     } else {
-
+        packet = new PcapPacket(ProtocolEnum::UNKNOWN__RAW, buffer);
     }
     return packet;
 }
