@@ -46,16 +46,20 @@ void PacketReader::stopCapture() {
 void PacketReader::captureFromFile(std::string const& file) {
     while (running == true) {
         PcapPacket* packet = nullptr;
-        std::cout << "capturing from file(\"" << file << "\") !!" << std::endl;
         feedSubscribers(packet);
     }
 }
 
 //TODO
 void PacketReader::captureFromNetwork() {
+    int raw_socket = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
+    unsigned char buffer[65536];
     while (running == true) {
-        PcapPacket* packet = nullptr;
-        std::cout << "capturing from network !!" << std::endl;
+        memset(buffer,0,65536);
+        struct sockaddr saddr;
+        int saddr_len = sizeof (saddr);
+        int buflen=recvfrom(raw_socket,buffer,65536,0,&saddr,(socklen_t *)&saddr_len);
+        PcapPacket* packet = new PcapPacket(buffer, buflen);
         feedSubscribers(packet);
     }
 }

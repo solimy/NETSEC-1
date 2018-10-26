@@ -3,7 +3,20 @@
 
 #include <type_traits>
 #include <cstdint>
+#include <stdlib.h>
+#include <string.h>
+#include <ctime>
+#include <chrono>
+#include <time.h>
+#include <unistd.h>
+#include <stdio.h>
 
+#include <net/ethernet.h>
+#include <net/if_arp.h>
+#include <netinet/ip.h>
+#include <netinet/ip_icmp.h>
+#include <netinet/udp.h>
+#include <netinet/tcp.h>
 #include "protocolenum.h"
 
 typedef struct pcaprec_hdr_s {
@@ -13,47 +26,141 @@ typedef struct pcaprec_hdr_s {
     uint32_t orig_len;       /* actual length of packet */
 } pcaprec_hdr_t;
 
+//UNKNOWN
+struct PcapRaw {
+    pcaprec_hdr_t pcapHeader;
+    uint8_t payload[0];
+} __attribute__((packed));
+
+//ETHERNET
+struct EthernetRaw {
+    pcaprec_hdr_t pcapHeader;
+    ethhdr ehternetHeader;
+    uint8_t payload[0];
+} __attribute__((packed));
+
+//IP
+struct IPRaw {
+    pcaprec_hdr_t pcapHeader;
+    ethhdr ehternetHeader;
+    iphdr ipHeader;
+    uint8_t payload[0];
+} __attribute__((packed));
+
+//ARP
+struct ARPRaw {
+    pcaprec_hdr_t pcapHeader;
+    ethhdr ehternetHeader;
+    iphdr ipHeader;
+    arphdr arpHeader;
+    uint8_t payload[0];
+} __attribute__((packed));
+
+//ICMP
+struct ICMPRaw {
+    pcaprec_hdr_t pcapHeader;
+    ethhdr ehternetHeader;
+    iphdr ipHeader;
+    icmphdr icmpHeader;
+    uint8_t payload[0];
+} __attribute__((packed));
+
+//TCP
+struct TCPRaw {
+    pcaprec_hdr_t pcapHeader;
+    ethhdr ehternetHeader;
+    iphdr ipHeader;
+    tcphdr tcpHeader;
+    uint8_t payload[0];
+} __attribute__((packed));
+
+//UDP
+struct UDPRaw {
+    pcaprec_hdr_t pcapHeader;
+    ethhdr ehternetHeader;
+    iphdr ipHeader;
+    udphdr udpHeader;
+    uint8_t payload[0];
+} __attribute__((packed));
+
+//HTTP
+struct HTTPRaw {
+    pcaprec_hdr_t pcapHeader;
+    ethhdr ehternetHeader;
+    iphdr ipHeader;
+    tcphdr tcpHeader;
+    char httpPayload[0];
+} __attribute__((packed));
+
+//DNS
+struct DNSRaw {
+    pcaprec_hdr_t pcapHeader;
+    ethhdr ehternetHeader;
+    iphdr ipHeader;
+    tcphdr tcpHeader;
+    char dnsPayload[0];
+} __attribute__((packed));
+
 class PcapPacket {
 public:
-    struct Data {
-        pcaprec_hdr_t pcap_header;
-        uint8_t raw[0];
-    } __attribute__((packed));
+    static ProtocolEnum protocolFinder(TCPRaw* raw) {
+        return ProtocolEnum::TCP;
+    }
 
-    class Factory {
-    public:
-        static PcapPacket* buildEmpty(ProtocolEnum protocol);
-        static PcapPacket* buildCopy(PcapPacket* toCopy);
-        static PcapPacket* buildFromPcapBuffer(void* buffer);
-        static PcapPacket* buildFromRawBuffer(void* buffer, unsigned long length);
-    };
-    friend Factory;
+    static ProtocolEnum protocolFinder(UDPRaw* raw) {
+        return ProtocolEnum::UDP;
+    }
 
-    virtual ~PcapPacket();
+    static ProtocolEnum protocolFinder(IPRaw* raw) {
+        switch (raw->ipHeader.protocol) {
+        case IPPROTO_TCP:
+            return protocolFinder((TCPRaw*)raw);
+        case IPPROTO_UDP:
+            return protocolFinder((UDPRaw*)raw);
+        case IPPROTO_ICMP:
+            return ProtocolEnum::ICMP;
+        default:
+            return ProtocolEnum::IP;
+        }
+    }
 
+    static ProtocolEnum protocolFinder(EthernetRaw* raw) {
+        printf("%u :: IP=%d, TCP=%d\n", raw->ehternetHeader.h_proto, ETHERTYPE_IP, IPPROTO_TCP);
+        if (raw->ehternetHeader.h_proto <= 1500)
+            return protocolFinder((IPRaw*)raw);
+        return ProtocolEnum::ETHERNET;
+    }
 
-    uint32_t get_ts_sec() const;
-    uint32_t get_ts_usec() const;
-    uint32_t get_incl_len() const;
-    uint32_t get_orig_len() const;
-    void set_ts_sec(uint32_t ts_sec);
-    void set_ts_usec(uint32_t ts_usec);
-    void set_incl_len(uint32_t incl_len);
-    void set_orig_len(uint32_t orig_len);
+    static ProtocolEnum protocolFinder(PcapRaw* raw) {
+        if (raw->pcapHeader.incl_len < sizeof (ethhdr)) {
+            return ProtocolEnum::UNKNOWN;
+        }
+        return protocolFinder((EthernetRaw*)raw);
+    }
 
-    ProtocolEnum getProtocol() const;
-    const void* getBuffer_withPcapHeader() const;
-    const void* getBuffer_withoutPcapHeader() const;
-    unsigned long getSize_withPcapHeader() const;
-    unsigned long getSize_withoutPcapHeader() const;
+    PcapPacket(PcapRaw* raw) {
+        this->raw = raw;
+        protocol = protocolFinder(this->raw);
+    }
 
-protected:
-    PcapPacket(ProtocolEnum protocol, void* data);
+    PcapPacket(uint8_t* raw, uint64_t len) {
+        struct timespec ti;
+        clock_gettime(CLOCK_REALTIME, &ti);
+        this->raw = (PcapRaw*)malloc(sizeof (PcapRaw) + len);
+        this->raw->pcapHeader.ts_sec = ti.tv_sec;
+        this->raw->pcapHeader.ts_usec = ti.tv_nsec/1000;
+        this->raw->pcapHeader.incl_len = len;
+        this->raw->pcapHeader.orig_len = len;
+        memcpy(this->raw->payload, raw, len);
+        protocol = protocolFinder(this->raw);
+    }
 
-private:
-    const ProtocolEnum protocol;
-    void* rawData;
-    Data* data;
+    ~PcapPacket() {
+        free(raw);
+    }
+
+    ProtocolEnum protocol;
+    PcapRaw* raw;
 };
 
 #endif // PCAPPACKET_H

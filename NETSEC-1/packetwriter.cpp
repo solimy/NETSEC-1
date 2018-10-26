@@ -16,9 +16,9 @@ void PacketWriter::feed(const PcapPacket* packet) {
     if (socket > 0) {
 
         //TODO si fichier
-        write(socket, packet->getBuffer_withPcapHeader(), packet->getSize_withPcapHeader());
+        //write(socket, packet->getBuffer_withPcapHeader(), packet->getSize_withPcapHeader());
         //TODO si network
-        write(socket, packet->getBuffer_withoutPcapHeader(), packet->getSize_withoutPcapHeader());
+        //write(socket, packet->getBuffer_withoutPcapHeader(), packet->getSize_withoutPcapHeader());
     }
 }
 

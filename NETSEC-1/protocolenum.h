@@ -2,7 +2,7 @@
 #define PROTOCOLENUM_H
 
 enum class ProtocolEnum : int {
-    UNKNOWN__RAW,
+    UNKNOWN,
     ETHERNET,
     ARP,
     ICMP,
