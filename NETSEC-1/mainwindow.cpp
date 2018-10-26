@@ -15,5 +15,4 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_toolButton_triggered(QAction *arg1)
 {
-
 }

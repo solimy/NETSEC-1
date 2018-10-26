@@ -30,7 +30,8 @@ SOURCES += \
     pcapfeeder.cpp \
     packetreader.cpp \
     packetwriter.cpp \
-    pcappacket.cpp
+    pcappacket.cpp \
+    captureoptions.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -38,10 +39,12 @@ HEADERS += \
     protocolenum.h \
     pcapfeeder.h \
     packetreader.h \
-    packetwriter.h
+    packetwriter.h \
+    captureoptions.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    captureoptions.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
