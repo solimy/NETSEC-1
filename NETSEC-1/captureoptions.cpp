@@ -17,11 +17,13 @@ CaptureOptions::~CaptureOptions()
 void CaptureOptions::on_pushButton_clicked()
 {
     reader->startCapture();
+    close();
 }
 
 void CaptureOptions::on_pushButton_3_clicked()
 {
     reader->stopCapture();
+    close();
 }
 
 void CaptureOptions::on_lineEdit_returnPressed()

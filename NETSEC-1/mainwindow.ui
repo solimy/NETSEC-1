@@ -82,6 +82,26 @@
        <string>saveToFile</string>
       </property>
      </widget>
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>30</y>
+        <width>1001</width>
+        <height>481</height>
+       </rect>
+      </property>
+      <column>
+       <property name="text">
+        <string>protocol</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>vide</string>
+       </property>
+      </column>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
