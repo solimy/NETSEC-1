@@ -14,43 +14,74 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 
 QT_BEGIN_NAMESPACE
 
-class Ui_Dialog
+class Ui_CaptureOptions
 {
 public:
-    QDialogButtonBox *buttonBox;
+    QFrame *frame;
+    QPushButton *pushButton;
+    QFrame *frame_2;
+    QPushButton *pushButton_2;
+    QLineEdit *lineEdit;
+    QFrame *frame_3;
+    QPushButton *pushButton_3;
 
-    void setupUi(QDialog *Dialog)
+    void setupUi(QDialog *CaptureOptions)
     {
-        if (Dialog->objectName().isEmpty())
-            Dialog->setObjectName(QStringLiteral("Dialog"));
-        Dialog->resize(400, 300);
-        buttonBox = new QDialogButtonBox(Dialog);
-        buttonBox->setObjectName(QStringLiteral("buttonBox"));
-        buttonBox->setGeometry(QRect(290, 20, 81, 241));
-        buttonBox->setOrientation(Qt::Vertical);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        if (CaptureOptions->objectName().isEmpty())
+            CaptureOptions->setObjectName(QStringLiteral("CaptureOptions"));
+        CaptureOptions->resize(841, 278);
+        frame = new QFrame(CaptureOptions);
+        frame->setObjectName(QStringLiteral("frame"));
+        frame->setGeometry(QRect(350, 10, 161, 80));
+        frame->setFrameShape(QFrame::StyledPanel);
+        frame->setFrameShadow(QFrame::Raised);
+        pushButton = new QPushButton(frame);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButton->setGeometry(QRect(10, 10, 141, 61));
+        frame_2 = new QFrame(CaptureOptions);
+        frame_2->setObjectName(QStringLiteral("frame_2"));
+        frame_2->setGeometry(QRect(10, 100, 821, 80));
+        frame_2->setFrameShape(QFrame::StyledPanel);
+        frame_2->setFrameShadow(QFrame::Raised);
+        pushButton_2 = new QPushButton(frame_2);
+        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
+        pushButton_2->setGeometry(QRect(10, 10, 141, 61));
+        lineEdit = new QLineEdit(frame_2);
+        lineEdit->setObjectName(QStringLiteral("lineEdit"));
+        lineEdit->setGeometry(QRect(160, 10, 651, 61));
+        frame_3 = new QFrame(CaptureOptions);
+        frame_3->setObjectName(QStringLiteral("frame_3"));
+        frame_3->setGeometry(QRect(350, 190, 161, 80));
+        frame_3->setFrameShape(QFrame::StyledPanel);
+        frame_3->setFrameShadow(QFrame::Raised);
+        pushButton_3 = new QPushButton(frame_3);
+        pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
+        pushButton_3->setGeometry(QRect(10, 10, 141, 61));
 
-        retranslateUi(Dialog);
-        QObject::connect(buttonBox, SIGNAL(accepted()), Dialog, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), Dialog, SLOT(reject()));
+        retranslateUi(CaptureOptions);
 
-        QMetaObject::connectSlotsByName(Dialog);
+        QMetaObject::connectSlotsByName(CaptureOptions);
     } // setupUi
 
-    void retranslateUi(QDialog *Dialog)
+    void retranslateUi(QDialog *CaptureOptions)
     {
-        Dialog->setWindowTitle(QApplication::translate("Dialog", "Dialog", 0));
+        CaptureOptions->setWindowTitle(QApplication::translate("CaptureOptions", "Dialog", 0));
+        pushButton->setText(QApplication::translate("CaptureOptions", "Capture from Network", 0));
+        pushButton_2->setText(QApplication::translate("CaptureOptions", "Capture from File", 0));
+        pushButton_3->setText(QApplication::translate("CaptureOptions", "Stop Capture", 0));
     } // retranslateUi
 
 };
 
 namespace Ui {
-    class Dialog: public Ui_Dialog {};
+    class CaptureOptions: public Ui_CaptureOptions {};
 } // namespace Ui
 
 QT_END_NAMESPACE

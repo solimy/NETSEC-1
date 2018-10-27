@@ -1,29 +1,37 @@
 #ifndef CAPTUREOPTIONS_H
 #define CAPTUREOPTIONS_H
 
-#include <QAbstractItemModel>
+#include "packetreader.h"
+#include <QDialog>
 
-class captureoptions : public QAbstractItemModel
+namespace Ui {
+class CaptureOptions;
+}
+
+class CaptureOptions : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit captureoptions(QObject *parent = nullptr);
+    explicit CaptureOptions(QWidget *parent = nullptr);
+    ~CaptureOptions();
+    PacketReader* reader;
 
-    // Header:
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    void setReader(PacketReader* reader) {
+        this->reader = reader;
+    }
 
-    // Basic functionality:
-    QModelIndex index(int row, int column,
-                      const QModelIndex &parent = QModelIndex()) const override;
-    QModelIndex parent(const QModelIndex &index) const override;
+    std::string file = "";
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+private slots:
+    void on_pushButton_clicked();
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    void on_pushButton_3_clicked();
+
+    void on_lineEdit_returnPressed();
 
 private:
+    Ui::CaptureOptions *ui;
 };
 
 #endif // CAPTUREOPTIONS_H

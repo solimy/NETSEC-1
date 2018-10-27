@@ -16,11 +16,6 @@ PacketReader::~PacketReader()
 void PacketReader::startCapture() {
     stopCapture();
     std::lock_guard<std::mutex> lock(routineSafety);
-    running = false;
-    if (routine != nullptr) {
-        routine->join();
-        delete routine;
-    }
     running = true;
     routine = new std::thread(&PacketReader::captureFromNetwork, this);
 }
@@ -39,13 +34,14 @@ void PacketReader::stopCapture() {
     if (routine != nullptr) {
         routine->join();
         delete routine;
+        routine = nullptr;
     }
 }
 
 //TODO
 void PacketReader::captureFromFile(std::string const& file) {
     while (running == true) {
-        PcapPacket* packet = nullptr;
+        std::shared_ptr<PcapPacket> packet = nullptr;
         feedSubscribers(packet);
     }
 }
@@ -59,7 +55,7 @@ void PacketReader::captureFromNetwork() {
         struct sockaddr saddr;
         int saddr_len = sizeof (saddr);
         int buflen=recvfrom(raw_socket,buffer,65536,0,&saddr,(socklen_t *)&saddr_len);
-        PcapPacket* packet = new PcapPacket(buffer, buflen);
+        std::shared_ptr<PcapPacket> packet = std::make_shared<PcapPacket>(buffer, buflen);
         feedSubscribers(packet);
     }
 }

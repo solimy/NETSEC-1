@@ -14,7 +14,7 @@ void PcapFeeder::PcapFeedable::unsubscribeToFeeder(PcapFeeder* feeder) {
     feeder->unsubscribe(this);
 }
 
-void PcapFeeder::PcapFeedable::safeFeed(PcapPacket* packet) {
+void PcapFeeder::PcapFeedable::safeFeed(std::shared_ptr<PcapPacket> packet) {
     std::lock_guard<std::mutex> lock(feedSafety);
     feed(packet);
 }
@@ -30,8 +30,17 @@ void PcapFeeder::unsubscribe(PcapFeedable* feedable) {
 }
 
 
-void PcapFeeder::feedSubscribers(PcapPacket* packet) {
+void PcapFeeder::feedSubscribers(std::shared_ptr<PcapPacket> packet) {
     std::lock_guard<std::mutex> lock(subscribersSafety);
-    for (auto subscriber : subscribers)
-        subscriber->safeFeed(packet);
+    std::unordered_set<PcapFeedable*> deads;
+
+    for (auto subscriber : subscribers) {
+        try {
+            subscriber->safeFeed(packet);
+        } catch (std::exception& e) {
+            deads.insert(subscriber);
+        }
+    }
+    for (auto dead : deads)
+        subscribers.erase(dead);
 }

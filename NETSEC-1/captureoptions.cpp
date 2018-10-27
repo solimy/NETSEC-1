@@ -1,46 +1,30 @@
 #include "captureoptions.h"
+#include "ui_captureoptions.h"
+#include "mainwindow.h"
 
-captureoptions::captureoptions(QObject *parent)
-    : QAbstractItemModel(parent)
+CaptureOptions::CaptureOptions(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::CaptureOptions)
 {
+    ui->setupUi(this);
 }
 
-QVariant captureoptions::headerData(int section, Qt::Orientation orientation, int role) const
+CaptureOptions::~CaptureOptions()
 {
-    // FIXME: Implement me!
+    delete ui;
 }
 
-QModelIndex captureoptions::index(int row, int column, const QModelIndex &parent) const
+void CaptureOptions::on_pushButton_clicked()
 {
-    // FIXME: Implement me!
+    reader->startCapture();
 }
 
-QModelIndex captureoptions::parent(const QModelIndex &index) const
+void CaptureOptions::on_pushButton_3_clicked()
 {
-    // FIXME: Implement me!
+    reader->stopCapture();
 }
 
-int captureoptions::rowCount(const QModelIndex &parent) const
+void CaptureOptions::on_lineEdit_returnPressed()
 {
-    if (!parent.isValid())
-        return 0;
 
-    // FIXME: Implement me!
-}
-
-int captureoptions::columnCount(const QModelIndex &parent) const
-{
-    if (!parent.isValid())
-        return 0;
-
-    // FIXME: Implement me!
-}
-
-QVariant captureoptions::data(const QModelIndex &index, int role) const
-{
-    if (!index.isValid())
-        return QVariant();
-
-    // FIXME: Implement me!
-    return QVariant();
 }

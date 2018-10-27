@@ -3,6 +3,7 @@
 
 #include <mutex>
 #include <unordered_set>
+#include <memory>
 
 #include "pcappacket.h"
 
@@ -35,7 +36,7 @@ public:
          * @param packet
          * @threadsafe
          */
-        virtual void feed(const PcapPacket* packet)=0;
+        virtual void feed(const std::shared_ptr<PcapPacket> packet)=0;
 
     private:
         std::mutex feedSafety;
@@ -45,7 +46,7 @@ public:
          * @param packet
          * @threadsafe
          */
-        void safeFeed(PcapPacket* packet);
+        void safeFeed(std::shared_ptr<PcapPacket> packet);
     };
 
 protected:
@@ -55,7 +56,7 @@ protected:
      * @param packet
      * @threadsafe
      */
-    void feedSubscribers(PcapPacket* packet);
+    void feedSubscribers(std::shared_ptr<PcapPacket> packet);
 
 private:
     std::mutex subscribersSafety;
@@ -80,7 +81,7 @@ private:
 namespace DEBUG {
     class PacketDumper : public PcapFeeder::PcapFeedable {
     public:
-        virtual void feed(const PcapPacket* p) {
+        virtual void feed(const std::shared_ptr<PcapPacket> p) {
             std::cout << "____" << std::endl;
             switch (p->protocol) {
             case ProtocolEnum::UNKNOWN:
