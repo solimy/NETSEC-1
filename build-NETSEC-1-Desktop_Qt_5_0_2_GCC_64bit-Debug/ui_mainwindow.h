@@ -44,12 +44,12 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1008, 605);
+        MainWindow->resize(1319, 668);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
-        tabWidget->setGeometry(QRect(0, 0, 1011, 541));
+        tabWidget->setGeometry(QRect(0, 0, 1301, 641));
         tab = new QWidget();
         tab->setObjectName(QStringLiteral("tab"));
         toolButton = new QToolButton(tab);
@@ -58,7 +58,7 @@ public:
         toolButton->setPopupMode(QToolButton::InstantPopup);
         lineEdit = new QLineEdit(tab);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
-        lineEdit->setGeometry(QRect(220, 0, 781, 22));
+        lineEdit->setGeometry(QRect(220, 0, 1071, 22));
         label = new QLabel(tab);
         label->setObjectName(QStringLiteral("label"));
         label->setGeometry(QRect(180, 0, 41, 16));
@@ -66,14 +66,28 @@ public:
         radioButton->setObjectName(QStringLiteral("radioButton"));
         radioButton->setGeometry(QRect(70, 0, 91, 20));
         tableWidget = new QTableWidget(tab);
-        if (tableWidget->columnCount() < 2)
-            tableWidget->setColumnCount(2);
+        if (tableWidget->columnCount() < 9)
+            tableWidget->setColumnCount(9);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(2, __qtablewidgetitem2);
+        QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(3, __qtablewidgetitem3);
+        QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(4, __qtablewidgetitem4);
+        QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(5, __qtablewidgetitem5);
+        QTableWidgetItem *__qtablewidgetitem6 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(6, __qtablewidgetitem6);
+        QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(7, __qtablewidgetitem7);
+        QTableWidgetItem *__qtablewidgetitem8 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(8, __qtablewidgetitem8);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
-        tableWidget->setGeometry(QRect(0, 30, 1001, 481));
+        tableWidget->setGeometry(QRect(0, 30, 1291, 571));
         tabWidget->addTab(tab, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName(QStringLiteral("tab_2"));
@@ -100,7 +114,21 @@ public:
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "protocol", 0));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QApplication::translate("MainWindow", "vide", 0));
+        ___qtablewidgetitem1->setText(QApplication::translate("MainWindow", "timestamp (sec)", 0));
+        QTableWidgetItem *___qtablewidgetitem2 = tableWidget->horizontalHeaderItem(2);
+        ___qtablewidgetitem2->setText(QApplication::translate("MainWindow", "timestamp (usec)", 0));
+        QTableWidgetItem *___qtablewidgetitem3 = tableWidget->horizontalHeaderItem(3);
+        ___qtablewidgetitem3->setText(QApplication::translate("MainWindow", "source mac", 0));
+        QTableWidgetItem *___qtablewidgetitem4 = tableWidget->horizontalHeaderItem(4);
+        ___qtablewidgetitem4->setText(QApplication::translate("MainWindow", "destination mac", 0));
+        QTableWidgetItem *___qtablewidgetitem5 = tableWidget->horizontalHeaderItem(5);
+        ___qtablewidgetitem5->setText(QApplication::translate("MainWindow", "source ip", 0));
+        QTableWidgetItem *___qtablewidgetitem6 = tableWidget->horizontalHeaderItem(6);
+        ___qtablewidgetitem6->setText(QApplication::translate("MainWindow", "source port", 0));
+        QTableWidgetItem *___qtablewidgetitem7 = tableWidget->horizontalHeaderItem(7);
+        ___qtablewidgetitem7->setText(QApplication::translate("MainWindow", "destination ip", 0));
+        QTableWidgetItem *___qtablewidgetitem8 = tableWidget->horizontalHeaderItem(8);
+        ___qtablewidgetitem8->setText(QApplication::translate("MainWindow", "destination port", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "packet capture", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "packet forging", 0));
     } // retranslateUi

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1008</width>
-    <height>605</height>
+    <width>1319</width>
+    <height>668</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>1011</width>
-      <height>541</height>
+      <width>1301</width>
+      <height>641</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -51,7 +51,7 @@
        <rect>
         <x>220</x>
         <y>0</y>
-        <width>781</width>
+        <width>1071</width>
         <height>22</height>
        </rect>
       </property>
@@ -87,8 +87,8 @@
        <rect>
         <x>0</x>
         <y>30</y>
-        <width>1001</width>
-        <height>481</height>
+        <width>1291</width>
+        <height>571</height>
        </rect>
       </property>
       <column>
@@ -98,7 +98,42 @@
       </column>
       <column>
        <property name="text">
-        <string>vide</string>
+        <string>timestamp (sec)</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>timestamp (usec)</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>source mac</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>destination mac</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>source ip</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>source port</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>destination ip</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>destination port</string>
        </property>
       </column>
      </widget>
