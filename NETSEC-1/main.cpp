@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     w.show();
 
     DEBUG::PacketDumper dumper;
-    dumper.subscribeToFeeder(&w.reader);
+    //dumper.subscribeToFeeder(&w.reader);
 
     return a.exec();
 }

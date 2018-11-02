@@ -10,6 +10,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <string>
 
 #include <net/ethernet.h>
 #include <net/if_arp.h>
@@ -29,86 +30,76 @@ typedef struct pcaprec_hdr_s {
 //UNKNOWN
 struct PcapRaw {
     pcaprec_hdr_t pcapHeader;
-    uint8_t payload[0];
+    uint8_t pcapPayload[0];
 } __attribute__((packed));
 
 //ETHERNET
-struct EthernetRaw {
-    pcaprec_hdr_t pcapHeader;
+struct EthernetRaw : public PcapRaw {
     ethhdr ehternetHeader;
-    uint8_t payload[0];
+    uint8_t ehternetPayload[0];
 } __attribute__((packed));
 
 //IP
-struct IPRaw {
-    pcaprec_hdr_t pcapHeader;
-    ethhdr ehternetHeader;
+struct IPRaw : public EthernetRaw {
     iphdr ipHeader;
-    uint8_t payload[0];
+    uint8_t ipPayload[0];
 } __attribute__((packed));
 
 //ARP
-struct ARPRaw {
-    pcaprec_hdr_t pcapHeader;
-    ethhdr ehternetHeader;
-    iphdr ipHeader;
+struct ARPRaw : public EthernetRaw {
     arphdr arpHeader;
     uint8_t payload[0];
 } __attribute__((packed));
 
 //ICMP
-struct ICMPRaw {
-    pcaprec_hdr_t pcapHeader;
-    ethhdr ehternetHeader;
-    iphdr ipHeader;
+struct ICMPRaw : public IPRaw {
     icmphdr icmpHeader;
-    uint8_t payload[0];
+    uint8_t icmpPayload[0];
 } __attribute__((packed));
 
 //TCP
-struct TCPRaw {
-    pcaprec_hdr_t pcapHeader;
-    ethhdr ehternetHeader;
-    iphdr ipHeader;
+struct TCPRaw : public IPRaw {
     tcphdr tcpHeader;
-    uint8_t payload[0];
+    uint8_t tcpPayload[0];
 } __attribute__((packed));
 
 //UDP
-struct UDPRaw {
-    pcaprec_hdr_t pcapHeader;
-    ethhdr ehternetHeader;
-    iphdr ipHeader;
+struct UDPRaw : public IPRaw {
     udphdr udpHeader;
-    uint8_t payload[0];
+    uint8_t udpPayload[0];
 } __attribute__((packed));
 
 //HTTP
-struct HTTPRaw {
-    pcaprec_hdr_t pcapHeader;
-    ethhdr ehternetHeader;
-    iphdr ipHeader;
-    tcphdr tcpHeader;
+struct HTTPRaw : public TCPRaw {
     char httpPayload[0];
 } __attribute__((packed));
 
 //DNS
-struct DNSRaw {
-    pcaprec_hdr_t pcapHeader;
-    ethhdr ehternetHeader;
-    iphdr ipHeader;
-    tcphdr tcpHeader;
+struct DNSRaw : public UDPRaw {
     char dnsPayload[0];
 } __attribute__((packed));
 
 class PcapPacket {
 public:
     static ProtocolEnum protocolFinder(TCPRaw* raw) {
-        return ProtocolEnum::TCP;
+        switch (ntohs(((UDPRaw*)raw)->udpHeader.uh_dport)) {
+        case 53 :
+            return ProtocolEnum::DNS;
+        case 80:
+        case 443:
+            return ProtocolEnum::HTTP;
+        default:
+            return ProtocolEnum::TCP;
+        }
     }
 
     static ProtocolEnum protocolFinder(UDPRaw* raw) {
-        return ProtocolEnum::UDP;
+        switch (ntohs(raw->udpHeader.uh_dport)) {
+        case 53 :
+            return ProtocolEnum::DNS;
+        default:
+            return ProtocolEnum::UDP;
+        }
     }
 
     static ProtocolEnum protocolFinder(IPRaw* raw) {
@@ -125,10 +116,16 @@ public:
     }
 
     static ProtocolEnum protocolFinder(EthernetRaw* raw) {
-        printf("%u :: IP=%d, TCP=%d\n", raw->ehternetHeader.h_proto, ETHERTYPE_IP, IPPROTO_TCP);
-        if (raw->ehternetHeader.h_proto <= 1500)
+        switch (ntohs(raw->ehternetHeader.h_proto)) {
+        case ETHERTYPE_IP:
             return protocolFinder((IPRaw*)raw);
-        return ProtocolEnum::ETHERNET;
+        case ETHERTYPE_IPV6:
+            return protocolFinder((IPRaw*)raw);
+        case ETHERTYPE_ARP:
+            return ProtocolEnum::ARP;
+        default:
+            return ProtocolEnum::ETHERNET;
+        }
     }
 
     static ProtocolEnum protocolFinder(PcapRaw* raw) {
@@ -151,7 +148,7 @@ public:
         this->raw->pcapHeader.ts_usec = ti.tv_nsec/1000;
         this->raw->pcapHeader.incl_len = len;
         this->raw->pcapHeader.orig_len = len;
-        memcpy(this->raw->payload, raw, len);
+        memcpy(this->raw->pcapPayload, raw, len);
         protocol = protocolFinder(this->raw);
     }
 

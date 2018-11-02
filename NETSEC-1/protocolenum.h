@@ -3,14 +3,14 @@
 
 enum class ProtocolEnum : int {
     UNKNOWN,
-    ETHERNET,
+    ETHERNET, //IDENTIFIE
     ARP,
-    ICMP,
-    IP,
-    TCP,
-    UDP,
-    HTTP,
-    DNS
+    ICMP, //IDENTIFIE
+    IP, //IDENTIFIE
+    TCP, //IDENTIFIE
+    UDP, //IDENTIFIE
+    HTTP, //IDENTIFIE
+    DNS //IDENTIFIE
 };
 
 #endif // PROTOCOLENUM_H
