@@ -109,6 +109,7 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "NETSEC-1", 0));
         toolButton->setText(QApplication::translate("MainWindow", "Options", 0));
+        lineEdit->setText(QApplication::translate("MainWindow", "proto=null srcIp=null dstIp=null srcPort=null dstPort=null", 0));
         label->setText(QApplication::translate("MainWindow", "Filters", 0));
         radioButton->setText(QApplication::translate("MainWindow", "saveToFile", 0));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);

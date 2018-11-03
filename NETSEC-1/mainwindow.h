@@ -5,6 +5,7 @@
 
 #include "packetreader.h"
 #include "pcapfeeder.h"
+#include "filter.h"
 #include <deque>
 #include <QTableWidget>
 #include <sstream>
@@ -16,7 +17,10 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow, public PcapFeeder::PcapFeedable
+class MainWindow :
+        public QMainWindow,
+        public PcapFeeder::PcapFeedable,
+        public PcapFeeder
 {
     Q_OBJECT
 
@@ -257,19 +261,24 @@ public:
 
     std::deque<std::shared_ptr<PcapPacket>> packets;
     QTableWidget* packetTable;
+    QLineEdit* lineEdit;
 
     virtual void feed(const std::shared_ptr<PcapPacket> packet) {
 
-        if (packets.size() > 100000)
-            packets.pop_back();
-        packets.push_front(packet);
-        packetTable->insertRow(packetTable->rowCount());
-        pushProtocol(packet);
-        pushTimestampSec(packet);
-        pushTimestampUsec(packet);
+        if (filter.filter(packet)) {
+            if (packets.size() > 100000)
+                packets.pop_back();
+            packets.push_front(packet);
+            packetTable->insertRow(packetTable->rowCount());
+            pushProtocol(packet);
+            pushTimestampSec(packet);
+            pushTimestampUsec(packet);
+            feedSubscribers(packet);
+        }
     }
 
     PacketReader reader;
+    Filter filter;
 
 private slots:
     void on_toolButton_triggered(QAction *arg1);
@@ -277,6 +286,8 @@ private slots:
     void on_toolButton_clicked();
 
     void on_tableWidget_cellDoubleClicked(int row, int column);
+
+    void on_lineEdit_editingFinished();
 
 private:
     Ui::MainWindow *ui;

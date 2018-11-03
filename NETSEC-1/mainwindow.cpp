@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     subscribeToFeeder(&reader);
     packetTable = findChild<QTableWidget*>(QString("tableWidget"),  Qt::FindChildrenRecursively);
+    lineEdit = findChild<QLineEdit*>(QString("lineEdit"),  Qt::FindChildrenRecursively);
     int column = -1;
     //proto
     packetTable->setColumnWidth(++column, 120);
@@ -51,4 +52,9 @@ void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
 {
     PacketDetails pD;
     pD.exec();
+}
+
+void MainWindow::on_lineEdit_editingFinished()
+{
+    filter.setFilters(lineEdit->text().toStdString());
 }

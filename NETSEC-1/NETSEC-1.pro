@@ -42,7 +42,8 @@ HEADERS += \
     packetreader.h \
     packetwriter.h \
     captureoptions.h \
-    packetdetails.h
+    packetdetails.h \
+    filter.h
 
 FORMS += \
         mainwindow.ui \
