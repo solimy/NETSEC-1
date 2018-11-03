@@ -11,8 +11,18 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Packet details</string>
   </property>
+  <widget class="QPlainTextEdit" name="plainTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>541</width>
+     <height>631</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

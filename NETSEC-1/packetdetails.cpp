@@ -6,6 +6,8 @@ PacketDetails::PacketDetails(QWidget *parent) :
     ui(new Ui::PacketDetails)
 {
     ui->setupUi(this);
+    plainTextEdit = findChild<QPlainTextEdit*>(QString("plainTextEdit"),  Qt::FindChildrenRecursively);
+    plainTextEdit->setReadOnly(true);
 }
 
 PacketDetails::~PacketDetails()

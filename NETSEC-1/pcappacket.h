@@ -27,6 +27,18 @@ typedef struct pcaprec_hdr_s {
     uint32_t orig_len;       /* actual length of packet */
 } pcaprec_hdr_t;
 
+struct _arp_hdr {
+  uint16_t htype;
+  uint16_t ptype;
+  uint8_t hlen;
+  uint8_t plen;
+  uint16_t opcode;
+  uint8_t sender_mac[6];
+  uint8_t sender_ip[4];
+  uint8_t target_mac[6];
+  uint8_t target_ip[4];
+} __attribute__((packed));
+
 //UNKNOWN
 struct PcapRaw {
     pcaprec_hdr_t pcapHeader;
@@ -47,7 +59,7 @@ struct IPRaw : public EthernetRaw {
 
 //ARP
 struct ARPRaw : public EthernetRaw {
-    arphdr arpHeader;
+    _arp_hdr arpHeader;
     uint8_t payload[0];
 } __attribute__((packed));
 

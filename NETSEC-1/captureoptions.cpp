@@ -30,3 +30,7 @@ void CaptureOptions::on_lineEdit_returnPressed()
 {
 
 }
+
+void CaptureOptions::on_pushButton_4_clicked()
+{
+}

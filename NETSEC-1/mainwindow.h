@@ -7,6 +7,7 @@
 #include "pcapfeeder.h"
 #include "filter.h"
 #include <deque>
+#include <unordered_map>
 #include <QTableWidget>
 #include <sstream>
 #include <sys/socket.h>
@@ -199,8 +200,6 @@ private:
             item->setText("ARP");
             pushSourceMac(packet);
             pushDestinationMac(packet);
-            pushSourceIp(packet);
-            pushDestinationIp(packet);
             break;
         case ProtocolEnum::IP:
             item->setText("IP");
@@ -259,16 +258,19 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    std::deque<std::shared_ptr<PcapPacket>> packets;
+    std::unordered_map<int, std::shared_ptr<PcapPacket>> packets;
     QTableWidget* packetTable;
     QLineEdit* lineEdit;
 
     virtual void feed(const std::shared_ptr<PcapPacket> packet) {
 
         if (filter.filter(packet)) {
-            if (packets.size() > 100000)
-                packets.pop_back();
-            packets.push_front(packet);
+            if (packets.size()>20000) {
+                packets.clear();
+                while (packetTable->rowCount() > 0)
+                    packetTable->removeRow(0);
+            }
+            packets.insert({packetTable->rowCount(), packet});
             packetTable->insertRow(packetTable->rowCount());
             pushProtocol(packet);
             pushTimestampSec(packet);

@@ -30,6 +30,8 @@ private slots:
 
     void on_lineEdit_returnPressed();
 
+    void on_pushButton_4_clicked();
+
 private:
     Ui::CaptureOptions *ui;
 };

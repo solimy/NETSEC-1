@@ -15,18 +15,23 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QPlainTextEdit>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_PacketDetails
 {
 public:
+    QPlainTextEdit *plainTextEdit;
 
     void setupUi(QDialog *PacketDetails)
     {
         if (PacketDetails->objectName().isEmpty())
             PacketDetails->setObjectName(QStringLiteral("PacketDetails"));
         PacketDetails->resize(558, 648);
+        plainTextEdit = new QPlainTextEdit(PacketDetails);
+        plainTextEdit->setObjectName(QStringLiteral("plainTextEdit"));
+        plainTextEdit->setGeometry(QRect(10, 10, 541, 631));
 
         retranslateUi(PacketDetails);
 
@@ -35,7 +40,7 @@ public:
 
     void retranslateUi(QDialog *PacketDetails)
     {
-        PacketDetails->setWindowTitle(QApplication::translate("PacketDetails", "Dialog", 0));
+        PacketDetails->setWindowTitle(QApplication::translate("PacketDetails", "Packet details", 0));
     } // retranslateUi
 
 };

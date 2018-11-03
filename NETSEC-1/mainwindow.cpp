@@ -51,6 +51,7 @@ void MainWindow::on_toolButton_clicked()
 void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
 {
     PacketDetails pD;
+    pD.setPacket(packets.at(row));
     pD.exec();
 }
 
