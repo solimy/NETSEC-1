@@ -12,15 +12,15 @@ PacketWriter::~PacketWriter()
 }
 
 //TODO
-virtual void feed(const std::shared_ptr<PcapPacket> packet) {
+void PacketWriter::feed(const std::shared_ptr<PcapPacket> packet) {
     if (type != -1 && fd[type] > 0) {
         if (type == FILE) {
             struct pcap_pkthdr pkthdr;
 
-            pkthdr.len = pkthdr.caplen = packet.raw.pcapHeader.orig_len;
-            pkthdr.ts.tv_sec = packet.raw.pcapHeader.ts_sec; // Some unix timestamp
-            write(fd[type], pkthdr, sizeof(pkthdr));
-            write(fd[type], packet.raw.pcapPayload, sizeof(packet.raw.pcapPayload));
+            pkthdr.len = pkthdr.caplen = packet->raw.pcapHeader.orig_len;
+            pkthdr.ts.tv_sec = packet->raw.pcapHeader.ts_sec; // Some unix timestamp
+            write(fd[type], &pkthdr, sizeof(pkthdr));
+            write(fd[type], &(packet->raw.pcapPayload), sizeof(packet->raw.pcapPayload));
         }
         //TODO si fichier
         //write(socket, packet->getBuffer_withPcapHeader(), packet->getSize_withPcapHeader());
@@ -31,7 +31,7 @@ virtual void feed(const std::shared_ptr<PcapPacket> packet) {
 
 void PacketWriter::stopWriting() {
     if (type != -1 && fd[type] > 0) {
-        close(socket);
+        close(fd[type]);
         fd[type] = -1;
     }
     type = -1;
@@ -58,5 +58,5 @@ void PacketWriter::startWriting(std::string const& file) {
     fh.snaplen = USHRT_MAX;
     fh.thiszone = 0;
     fh.linktype = LINKTYPE_ETHERNET;
-    write(fd[type], fh, sizeof(fh));
+    write(fd[type], &fh, sizeof(fh));
 }

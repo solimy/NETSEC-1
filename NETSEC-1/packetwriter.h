@@ -34,7 +34,7 @@ public:
     void stopWriting();
 
 protected:
-    virtual void feed(const PcapPacket* packet);
+    virtual void feed(const std::shared_ptr<PcapPacket> packet);
 
 private:
     int type = -1;
