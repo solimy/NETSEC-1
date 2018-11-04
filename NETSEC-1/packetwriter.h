@@ -1,7 +1,14 @@
 #ifndef PACKETWRITER_H
 #define PACKETWRITER_H
 
+#define NETWORK 0
+#define FILE 1
+
 #include <string>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <pcap.h>
 
 #include "pcapfeeder.h"
 
@@ -30,7 +37,8 @@ protected:
     virtual void feed(const PcapPacket* packet);
 
 private:
-    int socket = -1;
+    int type = -1;
+    int fd[2] = {-1};
 };
 
 #endif // PACKETWRITER_H
