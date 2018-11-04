@@ -2,7 +2,7 @@
 #define PACKETWRITER_H
 
 #define NETWORK 0
-#define FILE 1
+#define PCAP_FILE 1
 
 #include <string>
 #include <sys/types.h>
