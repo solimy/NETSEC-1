@@ -178,6 +178,9 @@ public:
             ss << "arpHeader.sender_mac=" << mac;
             plainTextEdit->appendPlainText(ss.str().c_str());
             ss.str("");
+            ss << "arpHeader.sender_ip=" << inet_ntoa(*(in_addr*)arpHeader.sender_ip);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
             sprintf(mac, "%.2X-%.2X-%.2X-%.2X-%.2X-%.2X",
                     arpHeader.target_mac[0],
                     arpHeader.target_mac[1],
@@ -188,7 +191,9 @@ public:
             ss << "arpHeader.target_mac=" << mac;
             plainTextEdit->appendPlainText(ss.str().c_str());
             ss.str("");
-            //arpRequest.arp_dev;
+            ss << "arpHeader.sender_ip=" << inet_ntoa(*(in_addr*)arpHeader.target_ip);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
             return;
         default:
             break;
