@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <unordered_set>
+#include <functional>
 
 #include <sys/socket.h>
 #include <netinet/in.h>
