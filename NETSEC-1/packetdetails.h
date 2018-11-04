@@ -187,7 +187,7 @@ public:
             ss << "arpHeader.target_mac=" << mac;
             plainTextEdit->appendPlainText(ss.str().c_str());
             ss.str("");
-            ss << "arpHeader.sender_ip=" << inet_ntoa(*(in_addr*)arpHeader.target_ip);
+            ss << "arpHeader.target_ip=" << inet_ntoa(*(in_addr*)arpHeader.target_ip);
             plainTextEdit->appendPlainText(ss.str().c_str());
             ss.str("");
             return;
@@ -262,14 +262,21 @@ public:
             ss << "icmpHeader.checksum=" << ntohs(icmpHeader.checksum);
             plainTextEdit->appendPlainText(ss.str().c_str());
             ss.str("");
-            ss << "! WARNING : header not fully implemented !";
+            ss << "icmpHeader.un.echo.id=" << ntohs(icmpHeader.un.echo.id);
             plainTextEdit->appendPlainText(ss.str().c_str());
             ss.str("");
-            //TODO
-            switch (icmpHeader.type) {
-            default:
-                break;
-            }
+            ss << "icmpHeader.un.echo.sequence=" << ntohs(icmpHeader.un.echo.sequence);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "icmpHeader.un.gateway=" << inet_ntoa(*(in_addr*)&icmpHeader.un.gateway);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "icmpHeader.un.frag.__glibc_reserved=" << ntohs(icmpHeader.un.frag.__glibc_reserved);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "icmpHeader.un.frag.mtu=" << ntohs(icmpHeader.un.frag.mtu);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
             plainTextEdit->appendPlainText(ss.str().c_str());
             ss.str("~Payload~");
             plainTextEdit->appendPlainText(ss.str().c_str());
