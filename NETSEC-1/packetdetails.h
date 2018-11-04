@@ -76,34 +76,28 @@ public:
         ss << "pcapHeader.orig_len=" << pcapHeader.orig_len;
         plainTextEdit->appendPlainText(ss.str().c_str());
         ss.str("");
-        switch (packet->protocol) {
-            case ProtocolEnum::UNKNOWN:
-                plainTextEdit->appendPlainText(ss.str().c_str());
-                ss.str("~Payload~");
-                plainTextEdit->appendPlainText(ss.str().c_str());
-                ss.str("");
-                ss << std::hex;
-                for (int i = 0, j = packet->raw->pcapHeader.incl_len; i < j; ++i) {
-                    if (std::isprint(pcapRaw->pcapPayload[i]))
-                        ss << pcapRaw->pcapPayload[i] << " ";
-                    else
-                        ss << "Ox" << (short)pcapRaw->pcapPayload[i] << " ";
-                }
-                plainTextEdit->appendPlainText(ss.str().c_str());
-                return;
-        default:
-            break;
+        if (packet->protocol == ProtocolEnum::UNKNOWN) {
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("~Payload~");
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << std::hex;
+            for (int i = 0, j = packet->raw->pcapHeader.incl_len; i < j; ++i) {
+                if (std::isprint(pcapRaw->pcapPayload[i]))
+                    ss << pcapRaw->pcapPayload[i] << " ";
+                else
+                    ss << "Ox" << (short)pcapRaw->pcapPayload[i] << " ";
+            }
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            return;
         }
         EthernetRaw* ethRaw = (EthernetRaw*)packet->raw;
         ethhdr ethHeader = ((EthernetRaw*)ethRaw)->ehternetHeader;
-        ARPRaw* arpRaw;
-        _arp_hdr arpHeader;
-        char formated[100];
         plainTextEdit->appendPlainText(ss.str().c_str());
         ss.str("~Ethernet Header~");
         plainTextEdit->appendPlainText(ss.str().c_str());
         ss.str("");
-        ss << "ethHeader.h_proto=" << std::hex << ntohs(ethHeader.h_proto);
+        ss << "ethHeader.h_proto=0x" << std::hex << ntohs(ethHeader.h_proto);
         plainTextEdit->appendPlainText(ss.str().c_str());
         ss.str("");
         char mac[100];
@@ -127,8 +121,7 @@ public:
         ss << "ethHeader.h_dest=" << mac;
         plainTextEdit->appendPlainText(ss.str().c_str());
         ss.str("");
-        switch (packet->protocol) {
-        case ProtocolEnum::ETHERNET:
+        if (packet->protocol == ProtocolEnum::ETHERNET) {
             plainTextEdit->appendPlainText(ss.str().c_str());
             ss.str("~Payload~");
             plainTextEdit->appendPlainText(ss.str().c_str());
@@ -142,7 +135,10 @@ public:
             }
             plainTextEdit->appendPlainText(ss.str().c_str());
             return;
-        case ProtocolEnum::ARP:
+        }
+        if (packet->protocol == ProtocolEnum::ARP) {
+            ARPRaw* arpRaw;
+            _arp_hdr arpHeader;
             arpRaw = (ARPRaw*)packet->raw;
             arpHeader = arpRaw->arpHeader;
             plainTextEdit->appendPlainText(ss.str().c_str());
@@ -195,8 +191,200 @@ public:
             plainTextEdit->appendPlainText(ss.str().c_str());
             ss.str("");
             return;
-        default:
-            break;
+        }
+        IPRaw* ipRaw = (IPRaw*)packet->raw;
+        iphdr ipHeader = ipRaw->ipHeader;
+        plainTextEdit->appendPlainText(ss.str().c_str());
+        ss.str("~IP Header~");
+        plainTextEdit->appendPlainText(ss.str().c_str());
+        ss.str("");
+        ss << "ipHeader.ihl=" << ntohs(ipHeader.ihl);
+        plainTextEdit->appendPlainText(ss.str().c_str());
+        ss.str("");
+        ss << "ipHeader.version=" << ntohs(ipHeader.version);
+        plainTextEdit->appendPlainText(ss.str().c_str());
+        ss.str("");
+        ss << "ipHeader.tos=" << (short)ipHeader.tos;
+        plainTextEdit->appendPlainText(ss.str().c_str());
+        ss.str("");
+        ss << "ipHeader.tot_len=" << ntohs(ipHeader.tot_len);
+        plainTextEdit->appendPlainText(ss.str().c_str());
+        ss.str("");
+        ss << "ipHeader.id=" << ntohs(ipHeader.id);
+        plainTextEdit->appendPlainText(ss.str().c_str());
+        ss.str("");
+        ss << "ipHeader.frag_off=" << ntohs(ipHeader.frag_off);
+        plainTextEdit->appendPlainText(ss.str().c_str());
+        ss.str("");
+        ss << "ipHeader.ttl=" << (short)ipHeader.ttl;
+        plainTextEdit->appendPlainText(ss.str().c_str());
+        ss.str("");
+        ss << "ipHeader.protocol=0x" << std::hex << (short)ipHeader.protocol << std::dec;
+        plainTextEdit->appendPlainText(ss.str().c_str());
+        ss.str("");
+        ss << "ipHeader.check=" << ntohs(ipHeader.check);
+        plainTextEdit->appendPlainText(ss.str().c_str());
+        ss.str("");
+        ss << "ipHeader.saddr=" << inet_ntoa(*(in_addr*)&ipHeader.saddr);
+        plainTextEdit->appendPlainText(ss.str().c_str());
+        ss.str("");
+        ss << "ipHeader.daddr=" << inet_ntoa(*(in_addr*)&ipHeader.daddr);
+        plainTextEdit->appendPlainText(ss.str().c_str());
+        ss.str("");
+        if (packet->protocol == ProtocolEnum::IP) {
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("~Payload~");
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << std::hex;
+            for (int i = 0, j = sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (IPRaw); i < j; ++i) {
+                if (std::isprint(ipRaw->ipPayload[i]))
+                    ss << ipRaw->ipPayload[i] << " ";
+                else
+                    ss << "Ox" << (short)ipRaw->ipPayload[i] << " ";
+            }
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            return;
+        }
+        if (packet->protocol == ProtocolEnum::ICMP) {
+            ICMPRaw* icmpRaw = (ICMPRaw*)packet->raw;
+            icmphdr icmpHeader = icmpRaw->icmpHeader;
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("~ICMP Header~");
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "icmpHeader.type=" << (short)icmpHeader.type;
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "icmpHeader.code=" << (short)icmpHeader.code;
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "icmpHeader.checksum=" << ntohs(icmpHeader.checksum);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "! WARNING : header not fully implemented !";
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            //TODO
+            switch (icmpHeader.type) {
+            default:
+                break;
+            }
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("~Payload~");
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << std::hex;
+            for (int i = 0, j = sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (ICMPRaw); i < j; ++i) {
+                if (std::isprint(icmpRaw->icmpPayload[i]))
+                    ss << icmpRaw->icmpPayload[i] << " ";
+                else
+                    ss << "Ox" << (short)icmpRaw->icmpPayload[i] << " ";
+            }
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            return;
+        } else if (packet->protocol == ProtocolEnum::UDP ||
+                   packet->protocol == ProtocolEnum::DNS) {
+            UDPRaw* udpRaw = (UDPRaw*)packet->raw;
+            udphdr udpHeader = udpRaw->udpHeader;
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("~UDP Header~");
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "udpHeader.source=" << ntohs(udpHeader.source);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "udpHeader.dest=" << ntohs(udpHeader.dest);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "udpHeader.len=" << ntohs(udpHeader.len);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "udpHeader.check=" << ntohs(udpHeader.check);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("~Payload~");
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << std::hex;
+            for (int i = 0, j = sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (UDPRaw); i < j; ++i) {
+                if (std::isprint(udpRaw->udpPayload[i]))
+                    ss << udpRaw->udpPayload[i] << " ";
+                else
+                    ss << "Ox" << (short)udpRaw->udpPayload[i] << " ";
+            }
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            return;
+        } else if (packet->protocol == ProtocolEnum::TCP ||
+                   packet->protocol == ProtocolEnum::HTTP){
+            TCPRaw* tcpRaw = (TCPRaw*)packet->raw;
+            tcphdr tcpHeader = tcpRaw->tcpHeader;
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("~TCP Header~");
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.source=" << ntohs(tcpHeader.source);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.dest=" << ntohs(tcpHeader.dest);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.seq=" << ntohs(tcpHeader.seq);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.ack_seq=" << ntohs(tcpHeader.ack_seq);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.res1=" << ntohs(tcpHeader.res1);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.doff=" << ntohs(tcpHeader.doff);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.fin=" << ntohs(tcpHeader.fin);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.syn=" << ntohs(tcpHeader.syn);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.rst=" << ntohs(tcpHeader.rst);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.psh=" << ntohs(tcpHeader.psh);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.ack=" << ntohs(tcpHeader.ack);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.urg=" << ntohs(tcpHeader.urg);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.res2=" << ntohs(tcpHeader.res2);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.window=" << ntohs(tcpHeader.window);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.check=" << ntohs(tcpHeader.check);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << "tcpHeader.urg_ptr=" << ntohs(tcpHeader.urg_ptr);
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("~Payload~");
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            ss.str("");
+            ss << std::hex;
+            for (int i = 0, j = sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (TCPRaw); i < j; ++i) {
+                if (std::isprint(tcpRaw->tcpPayload[i]))
+                    ss << tcpRaw->tcpPayload[i] << " ";
+                else
+                    ss << "Ox" << (short)tcpRaw->tcpPayload[i] << " ";
+            }
+            plainTextEdit->appendPlainText(ss.str().c_str());
+            return;
         }
     }
 

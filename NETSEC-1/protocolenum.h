@@ -4,11 +4,11 @@
 #include <unordered_map>
 
 enum class ProtocolEnum : int {
-    UNKNOWN,
-    ETHERNET, //IDENTIFIE
-    ARP,
-    ICMP, //IDENTIFIE
+    UNKNOWN,//IDENTIFIE ANALYSE
+    ETHERNET, //IDENTIFIE ANALYSE
+    ARP,//IDENTIFIE ANALYSE
     IP, //IDENTIFIE
+    ICMP, //IDENTIFIE
     TCP, //IDENTIFIE
     UDP, //IDENTIFIE
     HTTP, //IDENTIFIE
