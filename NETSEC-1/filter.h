@@ -142,7 +142,7 @@ public:
                 break;
             }
         }
-        udphdr udpHdr;
+        _udphdr udpHdr;
         if (srcPort.get() != nullptr) {
             switch (packet->protocol) {
             case ProtocolEnum::IP:

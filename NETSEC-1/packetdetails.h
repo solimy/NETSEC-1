@@ -56,24 +56,15 @@ public:
             ss << "DNS";
             break;
         }
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
+        ss << "\n";
         PcapRaw* pcapRaw = (PcapRaw*)packet->raw;
         pcaprec_hdr_t pcapHeader = pcapRaw->pcapHeader;
         plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("~Pcap Header~");
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "pcapHeader.ts_sec=" << pcapHeader.ts_sec;
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "pcapHeader.ts_usec=" << pcapHeader.ts_usec;
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "pcapHeader.incl_len=" << pcapHeader.incl_len;
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "pcapHeader.orig_len=" << pcapHeader.orig_len;
+        ss.str("~Pcap Header~\n");
+        ss << "pcapHeader.ts_sec=" << pcapHeader.ts_sec << "\n";
+        ss << "pcapHeader.ts_usec=" << pcapHeader.ts_usec << "\n";
+        ss << "pcapHeader.incl_len=" << pcapHeader.incl_len << "\n";
+        ss << "pcapHeader.orig_len=" << pcapHeader.orig_len << "\n";
         plainTextEdit->appendPlainText(ss.str().c_str());
         ss.str("");
         if (packet->protocol == ProtocolEnum::UNKNOWN) {
@@ -271,9 +262,6 @@ public:
             ss << "icmpHeader.un.gateway=" << inet_ntoa(*(in_addr*)&icmpHeader.un.gateway);
             plainTextEdit->appendPlainText(ss.str().c_str());
             ss.str("");
-            ss << "icmpHeader.un.frag.__glibc_reserved=" << ntohs(icmpHeader.un.frag.__glibc_reserved);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
             ss << "icmpHeader.un.frag.mtu=" << ntohs(icmpHeader.un.frag.mtu);
             plainTextEdit->appendPlainText(ss.str().c_str());
             ss.str("");
@@ -293,7 +281,7 @@ public:
         } else if (packet->protocol == ProtocolEnum::UDP ||
                    packet->protocol == ProtocolEnum::DNS) {
             UDPRaw* udpRaw = (UDPRaw*)packet->raw;
-            udphdr udpHeader = udpRaw->udpHeader;
+            _udphdr udpHeader = udpRaw->udpHeader;
             plainTextEdit->appendPlainText(ss.str().c_str());
             ss.str("~UDP Header~");
             plainTextEdit->appendPlainText(ss.str().c_str());
