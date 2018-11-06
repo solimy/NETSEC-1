@@ -59,19 +59,13 @@ public:
         ss << "\n";
         PcapRaw* pcapRaw = (PcapRaw*)packet->raw;
         pcaprec_hdr_t pcapHeader = pcapRaw->pcapHeader;
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("~Pcap Header~\n");
+        ss << "\n" << "~Pcap Header~" << "\n";
         ss << "pcapHeader.ts_sec=" << pcapHeader.ts_sec << "\n";
         ss << "pcapHeader.ts_usec=" << pcapHeader.ts_usec << "\n";
         ss << "pcapHeader.incl_len=" << pcapHeader.incl_len << "\n";
         ss << "pcapHeader.orig_len=" << pcapHeader.orig_len << "\n";
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
         if (packet->protocol == ProtocolEnum::UNKNOWN) {
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("~Payload~");
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
+            ss << "\n" << "~Payload~" << "\n";
             ss << std::hex;
             for (int i = 0, j = packet->raw->pcapHeader.incl_len; i < j; ++i) {
                 if (std::isprint(pcapRaw->pcapPayload[i]))
@@ -84,13 +78,8 @@ public:
         }
         EthernetRaw* ethRaw = (EthernetRaw*)packet->raw;
         ethhdr ethHeader = ((EthernetRaw*)ethRaw)->ehternetHeader;
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("~Ethernet Header~");
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "ethHeader.h_proto=0x" << std::hex << ntohs(ethHeader.h_proto);
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
+        ss << "\n" << "~Ethernet Header~" << "\n";
+        ss << "ethHeader.h_proto=0x" << std::hex << ntohs(ethHeader.h_proto) << "\n";
         char mac[100];
         sprintf(mac, "%.2X-%.2X-%.2X-%.2X-%.2X-%.2X",
                 ethHeader.h_source[0],
@@ -99,9 +88,7 @@ public:
                 ethHeader.h_source[3],
                 ethHeader.h_source[4],
                 ethHeader.h_source[5]);
-        ss << "ethHeader.h_source=" << mac;
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
+        ss << "ethHeader.h_source=" << mac << "\n";
         sprintf(mac, "%.2X-%.2X-%.2X-%.2X-%.2X-%.2X",
                 ethHeader.h_dest[0],
                 ethHeader.h_dest[1],
@@ -109,12 +96,9 @@ public:
                 ethHeader.h_dest[3],
                 ethHeader.h_dest[4],
                 ethHeader.h_dest[5]);
-        ss << "ethHeader.h_dest=" << mac;
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
+        ss << "ethHeader.h_dest=" << mac << "\n";
         if (packet->protocol == ProtocolEnum::ETHERNET) {
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("~Payload~");
+            ss << "\n" << "~Payload~" << "\n";
             plainTextEdit->appendPlainText(ss.str().c_str());
             ss.str("");
             ss << std::hex;
@@ -132,29 +116,13 @@ public:
             _arp_hdr arpHeader;
             arpRaw = (ARPRaw*)packet->raw;
             arpHeader = arpRaw->arpHeader;
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("~ARP Header~");
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "arpHeader.htype=" << ntohs(arpHeader.htype);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "arpHeader.ptype=" << ntohs(arpHeader.ptype);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "arpHeader.hlen=" << (short)arpHeader.hlen;
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "arpHeader.plen=" << (short)arpHeader.plen;
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "arpHeader.opcode=" << ntohs(arpHeader.opcode);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("~ARP Request~");
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
+            ss << "\n" << "~ARP Header~" << "\n";
+            ss << "arpHeader.htype=" << ntohs(arpHeader.htype) << "\n";
+            ss << "arpHeader.ptype=" << ntohs(arpHeader.ptype) << "\n";
+            ss << "arpHeader.hlen=" << (short)arpHeader.hlen << "\n";
+            ss << "arpHeader.plen=" << (short)arpHeader.plen << "\n";
+            ss << "arpHeader.opcode=" << ntohs(arpHeader.opcode) << "\n";
+            ss << "\n" << "~ARP Request~" << "\n";
             sprintf(mac, "%.2X-%.2X-%.2X-%.2X-%.2X-%.2X",
                     arpHeader.sender_mac[0],
                     arpHeader.sender_mac[1],
@@ -162,12 +130,8 @@ public:
                     arpHeader.sender_mac[3],
                     arpHeader.sender_mac[4],
                     arpHeader.sender_mac[5]);
-            ss << "arpHeader.sender_mac=" << mac;
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "arpHeader.sender_ip=" << inet_ntoa(*(in_addr*)arpHeader.sender_ip);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
+            ss << "arpHeader.sender_mac=" << mac << "\n";
+            ss << "arpHeader.sender_ip=" << inet_ntoa(*(in_addr*)arpHeader.sender_ip) << "\n";
             sprintf(mac, "%.2X-%.2X-%.2X-%.2X-%.2X-%.2X",
                     arpHeader.target_mac[0],
                     arpHeader.target_mac[1],
@@ -175,58 +139,27 @@ public:
                     arpHeader.target_mac[3],
                     arpHeader.target_mac[4],
                     arpHeader.target_mac[5]);
-            ss << "arpHeader.target_mac=" << mac;
+            ss << "arpHeader.target_mac=" << mac << "\n";
+            ss << "arpHeader.target_ip=" << inet_ntoa(*(in_addr*)arpHeader.target_ip) << "\n";
             plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "arpHeader.target_ip=" << inet_ntoa(*(in_addr*)arpHeader.target_ip);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
             return;
         }
         IPRaw* ipRaw = (IPRaw*)packet->raw;
         iphdr ipHeader = ipRaw->ipHeader;
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("~IP Header~");
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "ipHeader.ihl=" << ntohs(ipHeader.ihl);
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "ipHeader.version=" << ntohs(ipHeader.version);
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "ipHeader.tos=" << (short)ipHeader.tos;
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "ipHeader.tot_len=" << ntohs(ipHeader.tot_len);
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "ipHeader.id=" << ntohs(ipHeader.id);
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "ipHeader.frag_off=" << ntohs(ipHeader.frag_off);
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "ipHeader.ttl=" << (short)ipHeader.ttl;
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "ipHeader.protocol=0x" << std::hex << (short)ipHeader.protocol << std::dec;
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "ipHeader.check=" << ntohs(ipHeader.check);
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "ipHeader.saddr=" << inet_ntoa(*(in_addr*)&ipHeader.saddr);
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
-        ss << "ipHeader.daddr=" << inet_ntoa(*(in_addr*)&ipHeader.daddr);
-        plainTextEdit->appendPlainText(ss.str().c_str());
-        ss.str("");
+        ss << "\n" << "~IP Header~" << "\n";
+        ss << "ipHeader.ihl=" << ntohs(ipHeader.ihl) << "\n";
+        ss << "ipHeader.version=" << ntohs(ipHeader.version) << "\n";
+        ss << "ipHeader.tos=" << (short)ipHeader.tos << "\n";
+        ss << "ipHeader.tot_len=" << ntohs(ipHeader.tot_len) << "\n";
+        ss << "ipHeader.id=" << ntohs(ipHeader.id) << "\n";
+        ss << "ipHeader.frag_off=" << ntohs(ipHeader.frag_off) << "\n";
+        ss << "ipHeader.ttl=" << (short)ipHeader.ttl << "\n";
+        ss << "ipHeader.protocol=0x" << std::hex << (short)ipHeader.protocol << std::dec << "\n";
+        ss << "ipHeader.check=" << ntohs(ipHeader.check) << "\n";
+        ss << "ipHeader.saddr=" << inet_ntoa(*(in_addr*)&ipHeader.saddr) << "\n";
+        ss << "ipHeader.daddr=" << inet_ntoa(*(in_addr*)&ipHeader.daddr) << "\n";
         if (packet->protocol == ProtocolEnum::IP) {
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("~Payload~");
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
+            ss << "\n" << "~Payload~" << "\n";
             ss << std::hex;
             for (int i = 0, j = sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (IPRaw); i < j; ++i) {
                 if (std::isprint(ipRaw->ipPayload[i]))
@@ -240,35 +173,15 @@ public:
         if (packet->protocol == ProtocolEnum::ICMP) {
             ICMPRaw* icmpRaw = (ICMPRaw*)packet->raw;
             icmphdr icmpHeader = icmpRaw->icmpHeader;
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("~ICMP Header~");
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "icmpHeader.type=" << (short)icmpHeader.type;
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "icmpHeader.code=" << (short)icmpHeader.code;
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "icmpHeader.checksum=" << ntohs(icmpHeader.checksum);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "icmpHeader.un.echo.id=" << ntohs(icmpHeader.un.echo.id);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "icmpHeader.un.echo.sequence=" << ntohs(icmpHeader.un.echo.sequence);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "icmpHeader.un.gateway=" << inet_ntoa(*(in_addr*)&icmpHeader.un.gateway);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "icmpHeader.un.frag.mtu=" << ntohs(icmpHeader.un.frag.mtu);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("~Payload~");
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
+            ss << "\n" << "~ICMP Header~" << "\n";
+            ss << "icmpHeader.type=" << (short)icmpHeader.type << "\n";
+            ss << "icmpHeader.code=" << (short)icmpHeader.code << "\n";
+            ss << "icmpHeader.checksum=" << ntohs(icmpHeader.checksum) << "\n";
+            ss << "icmpHeader.un.echo.id=" << ntohs(icmpHeader.un.echo.id) << "\n";
+            ss << "icmpHeader.un.echo.sequence=" << ntohs(icmpHeader.un.echo.sequence) << "\n";
+            ss << "icmpHeader.un.gateway=" << inet_ntoa(*(in_addr*)&icmpHeader.un.gateway) << "\n";
+            ss << "icmpHeader.un.frag.mtu=" << ntohs(icmpHeader.un.frag.mtu) << "\n";
+            ss << "\n" << "~Payload~" << "\n";
             ss << std::hex;
             for (int i = 0, j = sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (ICMPRaw); i < j; ++i) {
                 if (std::isprint(icmpRaw->icmpPayload[i]))
@@ -282,26 +195,12 @@ public:
                    packet->protocol == ProtocolEnum::DNS) {
             UDPRaw* udpRaw = (UDPRaw*)packet->raw;
             _udphdr udpHeader = udpRaw->udpHeader;
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("~UDP Header~");
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "udpHeader.source=" << ntohs(udpHeader.source);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "udpHeader.dest=" << ntohs(udpHeader.dest);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "udpHeader.len=" << ntohs(udpHeader.len);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "udpHeader.check=" << ntohs(udpHeader.check);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("~Payload~");
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
+            ss << "\n" << "~UDP Header~" << "\n";
+            ss << "udpHeader.source=" << ntohs(udpHeader.source) << "\n";
+            ss << "udpHeader.dest=" << ntohs(udpHeader.dest) << "\n";
+            ss << "udpHeader.len=" << ntohs(udpHeader.len) << "\n";
+            ss << "udpHeader.check=" << ntohs(udpHeader.check) << "\n";
+            ss << "\n" << "~Payload~" << "\n";
             ss << std::hex;
             for (int i = 0, j = sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (UDPRaw); i < j; ++i) {
                 if (std::isprint(udpRaw->udpPayload[i]))
@@ -315,62 +214,24 @@ public:
                    packet->protocol == ProtocolEnum::HTTP){
             TCPRaw* tcpRaw = (TCPRaw*)packet->raw;
             tcphdr tcpHeader = tcpRaw->tcpHeader;
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("~TCP Header~");
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.source=" << ntohs(tcpHeader.source);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.dest=" << ntohs(tcpHeader.dest);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.seq=" << ntohs(tcpHeader.seq);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.ack_seq=" << ntohs(tcpHeader.ack_seq);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.res1=" << ntohs(tcpHeader.res1);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.doff=" << ntohs(tcpHeader.doff);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.fin=" << ntohs(tcpHeader.fin);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.syn=" << ntohs(tcpHeader.syn);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.rst=" << ntohs(tcpHeader.rst);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.psh=" << ntohs(tcpHeader.psh);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.ack=" << ntohs(tcpHeader.ack);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.urg=" << ntohs(tcpHeader.urg);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.res2=" << ntohs(tcpHeader.res2);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.window=" << ntohs(tcpHeader.window);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.check=" << ntohs(tcpHeader.check);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            ss << "tcpHeader.urg_ptr=" << ntohs(tcpHeader.urg_ptr);
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("~Payload~");
-            plainTextEdit->appendPlainText(ss.str().c_str());
-            ss.str("");
+            ss << "\n" << "~TCP Header~" << "\n";
+            ss << "tcpHeader.source=" << ntohs(tcpHeader.source) << "\n";
+            ss << "tcpHeader.dest=" << ntohs(tcpHeader.dest) << "\n";
+            ss << "tcpHeader.seq=" << ntohs(tcpHeader.seq) << "\n";
+            ss << "tcpHeader.ack_seq=" << ntohs(tcpHeader.ack_seq) << "\n";
+            ss << "tcpHeader.res1=" << ntohs(tcpHeader.res1) << "\n";
+            ss << "tcpHeader.doff=" << ntohs(tcpHeader.doff) << "\n";
+            ss << "tcpHeader.fin=" << ntohs(tcpHeader.fin) << "\n";
+            ss << "tcpHeader.syn=" << ntohs(tcpHeader.syn) << "\n";
+            ss << "tcpHeader.rst=" << ntohs(tcpHeader.rst) << "\n";
+            ss << "tcpHeader.psh=" << ntohs(tcpHeader.psh) << "\n";
+            ss << "tcpHeader.ack=" << ntohs(tcpHeader.ack) << "\n";
+            ss << "tcpHeader.urg=" << ntohs(tcpHeader.urg) << "\n";
+            ss << "tcpHeader.res2=" << ntohs(tcpHeader.res2) << "\n";
+            ss << "tcpHeader.window=" << ntohs(tcpHeader.window) << "\n";
+            ss << "tcpHeader.check=" << ntohs(tcpHeader.check) << "\n";
+            ss << "tcpHeader.urg_ptr=" << ntohs(tcpHeader.urg_ptr) << "\n";
+            ss << "\n" << "~Payload~" << "\n";
             ss << std::hex;
             for (int i = 0, j = sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (TCPRaw); i < j; ++i) {
                 if (std::isprint(tcpRaw->tcpPayload[i]))
