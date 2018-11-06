@@ -58,6 +58,6 @@ void PacketWriter::startWriting(std::string const& file) {
     fh.version_minor = PCAP_VERSION_MINOR;
     fh.snaplen = USHRT_MAX;
     fh.thiszone = 0;
-    fh.linktype = DLT_EN10MB;
+    fh.linktype = LINKTYPE_ETHERNET;
     write(fd[type], &fh, sizeof(fh));
 }

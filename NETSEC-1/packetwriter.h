@@ -10,10 +10,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <netinet/udp.h>
-#include <pcap/pcap.h>
+//#include <pcap/pcap.h>
 
 #include "pcapfeeder.h"
+#include "pcap.h"
 
 class PacketWriter : public PcapFeeder::PcapFeedable
 {
