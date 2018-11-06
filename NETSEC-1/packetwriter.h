@@ -3,12 +3,15 @@
 
 #define NETWORK 0
 #define PCAP_FILE 1
+#define TCPDUMP_MAGIC 0xa1b2c3d4
 
 #include <string>
+#include <climits>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <pcap.h>
+#include <netinet/udp.h>
+#include <pcap/pcap.h>
 
 #include "pcapfeeder.h"
 

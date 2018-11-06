@@ -18,14 +18,15 @@ void PacketWriter::feed(const std::shared_ptr<PcapPacket> packet) {
             struct pcap_pkthdr pkthdr;
 
             pkthdr.len = pkthdr.caplen = packet->raw->pcapHeader.orig_len;
-            pkthdr.ts.tv_sec = packet->raw->pcapHeader.ts_sec; // Some unix timestamp
+            pkthdr.ts.tv_sec = packet->raw->pcapHeader.ts_sec;
             write(fd[type], &pkthdr, sizeof(pkthdr));
             write(fd[type], &(packet->raw->pcapPayload), sizeof(packet->raw->pcapPayload));
         }
-        //TODO si fichier
-        //write(socket, packet->getBuffer_withPcapHeader(), packet->getSize_withPcapHeader());
-        //TODO si network
-        //write(socket, packet->getBuffer_withoutPcapHeader(), packet->getSize_withoutPcapHeader());
+        if (type == NETWORK) {
+            EthernetRaw* eth_raw = (EthernetRaw*)(packet->raw);
+            struct sockaddr *sock_dst = (struct sockaddr*)(eth_raw->ehternetHeader.h_dest);
+            sendto(fd[type], packet->raw->pcapPayload, packet->raw->pcapHeader.incl_len, 0, sock_dst, sizeof(struct sockaddr));
+        }
     }
 }
 
@@ -41,7 +42,7 @@ void PacketWriter::stopWriting() {
 void PacketWriter::startWriting() {
     stopWriting();
     type = NETWORK;
-    fd[type] = -1;
+    fd[type] = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
 }
 
 //TODO
@@ -51,12 +52,12 @@ void PacketWriter::startWriting(std::string const& file) {
     stopWriting();
     type = PCAP_FILE;
     fd[type] = open(file.c_str(), O_APPEND | O_CREAT);
-    //fh.magic = TCPDUMP_MAGIC;
+    fh.magic = TCPDUMP_MAGIC;
     fh.sigfigs = 0;
-    fh.version_major = 2;
-    fh.version_minor = 4;
-    //fh.snaplen = USHRT_MAX;
+    fh.version_major = PCAP_VERSION_MAJOR;
+    fh.version_minor = PCAP_VERSION_MINOR;
+    fh.snaplen = USHRT_MAX;
     fh.thiszone = 0;
-    //fh.linktype = LINKTYPE_ETHERNET;
+    fh.linktype = DLT_EN10MB;
     write(fd[type], &fh, sizeof(fh));
 }
