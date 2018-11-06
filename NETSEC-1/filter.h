@@ -18,69 +18,116 @@
 #include "pcappacket.h"
 
 class Filter {
-    std::shared_ptr<ProtocolEnum> proto;
-    std::shared_ptr<uint32_t> srcIp;
-    std::shared_ptr<uint16_t> srcPort;
-    std::shared_ptr<uint32_t> dstIp;
-    std::shared_ptr<uint16_t> dstPort;
+public:
+    enum OPT_TYPE {NO_OPT, EQUALS, NOTEQUALS};
+    template<typename T>
+    class FilterOpt {
+        std::shared_ptr<T> value;
+        OPT_TYPE type = OPT_TYPE::NO_OPT;
+    public:
+        void configure(OPT_TYPE optType, T value) {
+            type = optType;
+            this->value = std::make_shared<T>(value);
+        }
 
-    const std::unordered_map<std::string, std::function<void(const std::string&)> > filterFields = {
-        {"proto", [this](const std::string& value){
+        void reset() {
+            type = OPT_TYPE::NO_OPT;
+            value.reset();
+        }
+
+        bool isSet() {
+            return type!=OPT_TYPE::NO_OPT && value.get() != nullptr;
+        }
+
+        bool filter(T value) {
+            if (isSet())
+                switch (type) {
+                case OPT_TYPE::EQUALS:
+                    return *this->value == value;
+                case OPT_TYPE::NOTEQUALS:
+                    return *this->value != value;
+                default:
+                    return true;
+                }
+            return true;
+        }
+    };
+
+private:
+    FilterOpt<ProtocolEnum> proto;
+    FilterOpt<uint32_t> srcIp;
+    FilterOpt<uint16_t> srcPort;
+    FilterOpt<uint32_t> dstIp;
+    FilterOpt<uint16_t> dstPort;
+
+    const std::unordered_map<std::string, std::function<void(OPT_TYPE, const std::string&)> > filterFields = {
+        {"proto", [this](OPT_TYPE optType, const std::string& value){
             if (value == "UNKNOWN") {
-                this->proto = std::make_shared<ProtocolEnum>(ProtocolEnum::UNKNOWN);
+                this->proto.configure(optType, ProtocolEnum::UNKNOWN);
             } else if (value == "ETHERNET") {
-                this->proto = std::make_shared<ProtocolEnum>(ProtocolEnum::ETHERNET);
+                this->proto.configure(optType, ProtocolEnum::ETHERNET);
             } else if (value == "ARP") {
-                this->proto = std::make_shared<ProtocolEnum>(ProtocolEnum::ARP);
+                this->proto.configure(optType, ProtocolEnum::ARP);
             } else if (value == "ICMP") {
-                this->proto = std::make_shared<ProtocolEnum>(ProtocolEnum::ICMP);
+                this->proto.configure(optType, ProtocolEnum::ICMP);
             } else if (value == "IP") {
-                this->proto = std::make_shared<ProtocolEnum>(ProtocolEnum::IP);
+                this->proto.configure(optType, ProtocolEnum::IP);
             } else if (value == "UDP") {
-                this->proto = std::make_shared<ProtocolEnum>(ProtocolEnum::UDP);
+                this->proto.configure(optType, ProtocolEnum::UDP);
             } else if (value == "TCP") {
-                this->proto = std::make_shared<ProtocolEnum>(ProtocolEnum::TCP);
+                this->proto.configure(optType, ProtocolEnum::TCP);
             } else if (value == "HTTP") {
-                this->proto = std::make_shared<ProtocolEnum>(ProtocolEnum::HTTP);
+                this->proto.configure(optType, ProtocolEnum::HTTP);
             } else if (value == "DNS") {
-                this->proto = std::make_shared<ProtocolEnum>(ProtocolEnum::DNS);
+                this->proto.configure(optType, ProtocolEnum::DNS);
             }
-            if (proto.get() != nullptr)
+            if (proto.isSet())
             printf("%s=%s\n", "proto", value.c_str());
         }},
-        {"srcIp", [this](const std::string& value){
+        {"srcIp", [this](OPT_TYPE optType, const std::string& value){
             in_addr inaddr;
             if (inet_aton(value.c_str(), &inaddr) != 0) {
-                srcIp = std::make_shared<uint32_t>(inaddr.s_addr);
+                srcIp.configure(optType, inaddr.s_addr);
             }
-            if (srcIp.get() != nullptr)
+            if (srcIp.isSet())
             printf("%s=%s\n", "srcIp", value.c_str());
         }},
-        {"dstIp", [this](const std::string& value){
+        {"dstIp", [this](OPT_TYPE optType, const std::string& value){
             in_addr inaddr;
             if (inet_aton(value.c_str(), &inaddr) != 0) {
-                dstIp = std::make_shared<uint32_t>(inaddr.s_addr);
+                dstIp.configure(optType, inaddr.s_addr);
             }
-            if (dstIp.get() != nullptr)
+            if (dstIp.isSet())
             printf("%s=%s\n", "dstIp", value.c_str());
         }},
-        {"srcPort", [this](const std::string& value){
+        {"srcPort", [this](OPT_TYPE optType, const std::string& value){
             try {
-                srcPort = std::make_shared<uint16_t>(htons(std::stoi(value.c_str())));
+                srcPort.configure(optType, htons(std::stoi(value.c_str())));
             } catch (std::invalid_argument& ia) {
             }
-            if (srcPort.get() != nullptr)
+            if (srcPort.isSet())
             printf("%s=%s\n", "srcPort", value.c_str());
         }},
-        {"dstPort", [this](const std::string& value){
+        {"dstPort", [this](OPT_TYPE optType, const std::string& value){
             try {
-            dstPort = std::make_shared<uint16_t>(htons(std::stoi(value.c_str())));
+                dstPort.configure(optType, htons(std::stoi(value.c_str())));
             } catch (std::invalid_argument& ia) {
             }
-            if (dstPort.get() != nullptr)
+            if (dstPort.isSet())
             printf("%s=%s\n", "dstPort", value.c_str());
         }}
     };
+
+void replaceAll(std::string& str, const std::string& from, const std::string& to) {
+    if(from.empty())
+        return;
+    size_t start_pos = 0;
+    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+    }
+}
+
 
 public:
     Filter() {
@@ -100,70 +147,49 @@ public:
         while (ss.good()) {
             std::string s, field, value;
             ss >> s;
-            if (s.find('=') == std::string::npos)
+            OPT_TYPE optType;
+            if (s.find("==") != std::string::npos) {
+                replaceAll(s, "==", " ");
+                optType = OPT_TYPE::EQUALS;
+            } else if (s.find("!=") != std::string::npos) {
+                replaceAll(s, "!=", " ");
+                optType = OPT_TYPE::NOTEQUALS;
+            } else
                 continue;
-            std::replace(s.begin(), s.end(), '=', ' ');
             std::stringstream sss(s);
             sss >> field;
             sss >> value;
             auto opt = filterFields.at(field);
             if (opt != nullptr)
-                opt(value);
+                opt(optType, value);
         }
     }
 
     bool filter(const std::shared_ptr<PcapPacket>& packet) {
         bool isOk = true;
-        if (proto.get() != nullptr) {
-            isOk &= packet->protocol == *proto;
+        isOk &= proto.filter(packet->protocol);
+        iphdr ipHdr;
+        switch (packet->protocol) {
+        case ProtocolEnum::UNKNOWN:
+        case ProtocolEnum::ETHERNET:
+        case ProtocolEnum::ARP:
+            return false;
+        default:
+            ipHdr = ((IPRaw*)packet->raw)->ipHeader;
+            isOk &= srcIp.filter(ipHdr.saddr);
+            isOk &= dstIp.filter(ipHdr.daddr);
+            break;
         }
-    iphdr ipHdr;
-    if (srcIp.get() != nullptr) {
-            switch (packet->protocol) {
-            case ProtocolEnum::UNKNOWN:
-            case ProtocolEnum::ETHERNET:
-            case ProtocolEnum::ARP:
-                return false;
-            default:
-                ipHdr = ((IPRaw*)packet->raw)->ipHeader;
-                isOk &= ipHdr.saddr == *srcIp;
-                break;
-            }
-        }
-        if (dstIp.get() != nullptr) {
-            switch (packet->protocol) {
-            case ProtocolEnum::UNKNOWN:
-            case ProtocolEnum::ETHERNET:
-            case ProtocolEnum::ARP:
-                return false;
-            default:
-                ipHdr = ((IPRaw*)packet->raw)->ipHeader;
-                isOk &= ipHdr.daddr == *dstIp;
-                break;
-            }
-        }
-        udphdr udpHdr;
-        if (srcPort.get() != nullptr) {
-            switch (packet->protocol) {
-            case ProtocolEnum::IP:
-            case ProtocolEnum::ICMP:
-                return false;
-            default:
-                udpHdr = ((UDPRaw*)packet->raw)->udpHeader;
-                isOk &= udpHdr.source == *srcPort;
-                break;
-            }
-        }
-        if (dstPort.get() != nullptr) {
-            switch (packet->protocol) {
-            case ProtocolEnum::IP:
-            case ProtocolEnum::ICMP:
-                return false;
-            default:
-                udpHdr = ((UDPRaw*)packet->raw)->udpHeader;
-                isOk &= udpHdr.dest == *dstPort;
-                break;
-            }
+        _udphdr udpHdr;
+        switch (packet->protocol) {
+        case ProtocolEnum::IP:
+        case ProtocolEnum::ICMP:
+            return false;
+        default:
+            udpHdr = ((UDPRaw*)packet->raw)->udpHeader;
+            isOk &= srcPort.filter(udpHdr.source);
+            isOk &= dstPort.filter(udpHdr.dest);
+            break;
         }
         return isOk;
     }

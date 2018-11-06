@@ -39,6 +39,13 @@ struct _arp_hdr {
   uint8_t target_ip[4];
 } __attribute__((packed));
 
+struct _udphdr
+{
+  u_int16_t source;
+  u_int16_t dest;
+  u_int16_t len;
+  u_int16_t check;
+}__attribute__((packed));
 //UNKNOWN
 struct PcapRaw {
     pcaprec_hdr_t pcapHeader;
@@ -77,7 +84,7 @@ struct TCPRaw : public IPRaw {
 
 //UDP
 struct UDPRaw : public IPRaw {
-    udphdr udpHeader;
+    _udphdr udpHeader;
     uint8_t udpPayload[0];
 } __attribute__((packed));
 
@@ -94,7 +101,7 @@ struct DNSRaw : public UDPRaw {
 class PcapPacket {
 public:
     static ProtocolEnum protocolFinder(TCPRaw* raw) {
-        switch (ntohs(((UDPRaw*)raw)->udpHeader.uh_dport)) {
+        switch (ntohs(((UDPRaw*)raw)->udpHeader.dest)) {
         case 53 :
             return ProtocolEnum::DNS;
         case 80:
@@ -106,7 +113,7 @@ public:
     }
 
     static ProtocolEnum protocolFinder(UDPRaw* raw) {
-        switch (ntohs(raw->udpHeader.uh_dport)) {
+        switch (ntohs(raw->udpHeader.dest)) {
         case 53 :
             return ProtocolEnum::DNS;
         default:

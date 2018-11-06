@@ -56,7 +56,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>proto=null srcIp=null dstIp=null srcPort=null dstPort=null</string>
+       <string>proto==null srcIp==null dstIp==null srcPort==null dstPort==null</string>
       </property>
      </widget>
      <widget class="QLabel" name="label">
