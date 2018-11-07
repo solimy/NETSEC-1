@@ -264,7 +264,11 @@ public:
 
     virtual void feed(const std::shared_ptr<PcapPacket> packet) {
 
+        if (packet->protocol == ProtocolEnum::ETHERNET)
+            printf("fed with ETHERNET\n");
         if (filter.filter(packet)) {
+            if (packet->protocol == ProtocolEnum::ETHERNET)
+                printf("ETHERNET packet passed through the filter\n");
             if (packets.size()>20000) {
                 packets.clear();
                 while (packetTable->rowCount() > 0)

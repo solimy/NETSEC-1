@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <functional>
+#include <stdio.h>
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -41,6 +42,7 @@ public:
 
         bool filter(T value) {
             if (isSet())
+                printf("%d, %d\n", *this->value, value);
                 switch (type) {
                 case OPT_TYPE::EQUALS:
                     return *this->value == value;
@@ -173,7 +175,7 @@ public:
         case ProtocolEnum::UNKNOWN:
         case ProtocolEnum::ETHERNET:
         case ProtocolEnum::ARP:
-            return false;
+            return isOk;
         default:
             ipHdr = ((IPRaw*)packet->raw)->ipHeader;
             isOk &= srcIp.filter(ipHdr.saddr);
@@ -184,7 +186,7 @@ public:
         switch (packet->protocol) {
         case ProtocolEnum::IP:
         case ProtocolEnum::ICMP:
-            return false;
+            return isOk;
         default:
             udpHdr = ((UDPRaw*)packet->raw)->udpHeader;
             isOk &= srcPort.filter(udpHdr.source);

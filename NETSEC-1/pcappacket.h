@@ -138,10 +138,9 @@ public:
         switch (ntohs(raw->ehternetHeader.h_proto)) {
         case ETHERTYPE_IP:
             return protocolFinder((IPRaw*)raw);
-        case ETHERTYPE_IPV6:
-            return protocolFinder((IPRaw*)raw);
         case ETHERTYPE_ARP:
             return ProtocolEnum::ARP;
+        case ETHERTYPE_IPV6:
         default:
             return ProtocolEnum::ETHERNET;
         }

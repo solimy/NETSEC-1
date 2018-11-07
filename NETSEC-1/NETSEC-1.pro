@@ -43,7 +43,8 @@ HEADERS += \
     packetwriter.h \
     captureoptions.h \
     packetdetails.h \
-    filter.h
+    filter.h \
+    pcap.h
 
 FORMS += \
         mainwindow.ui \

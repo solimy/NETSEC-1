@@ -228,7 +228,8 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		../NETSEC-1/packetwriter.h \
 		../NETSEC-1/captureoptions.h \
 		../NETSEC-1/packetdetails.h \
-		../NETSEC-1/filter.h ../NETSEC-1/main.cpp \
+		../NETSEC-1/filter.h \
+		../NETSEC-1/pcap.h ../NETSEC-1/main.cpp \
 		../NETSEC-1/mainwindow.cpp \
 		../NETSEC-1/pcapfeeder.cpp \
 		../NETSEC-1/packetreader.cpp \
@@ -569,7 +570,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib64/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../NETSEC-1/mainwindow.h ../NETSEC-1/pcappacket.h ../NETSEC-1/protocolenum.h ../NETSEC-1/pcapfeeder.h ../NETSEC-1/packetreader.h ../NETSEC-1/packetwriter.h ../NETSEC-1/captureoptions.h ../NETSEC-1/packetdetails.h ../NETSEC-1/filter.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../NETSEC-1/mainwindow.h ../NETSEC-1/pcappacket.h ../NETSEC-1/protocolenum.h ../NETSEC-1/pcapfeeder.h ../NETSEC-1/packetreader.h ../NETSEC-1/packetwriter.h ../NETSEC-1/captureoptions.h ../NETSEC-1/packetdetails.h ../NETSEC-1/filter.h ../NETSEC-1/pcap.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../NETSEC-1/main.cpp ../NETSEC-1/mainwindow.cpp ../NETSEC-1/pcapfeeder.cpp ../NETSEC-1/packetreader.cpp ../NETSEC-1/packetwriter.cpp ../NETSEC-1/pcappacket.cpp ../NETSEC-1/captureoptions.cpp ../NETSEC-1/packetdetails.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../NETSEC-1/mainwindow.ui ../NETSEC-1/captureoptions.ui ../NETSEC-1/packetdetails.ui $(DISTDIR)/
 
@@ -692,7 +693,8 @@ packetreader.o: ../NETSEC-1/packetreader.cpp ../NETSEC-1/packetreader.h \
 packetwriter.o: ../NETSEC-1/packetwriter.cpp ../NETSEC-1/packetwriter.h \
 		../NETSEC-1/pcapfeeder.h \
 		../NETSEC-1/pcappacket.h \
-		../NETSEC-1/protocolenum.h
+		../NETSEC-1/protocolenum.h \
+		../NETSEC-1/pcap.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o packetwriter.o ../NETSEC-1/packetwriter.cpp
 
 pcappacket.o: ../NETSEC-1/pcappacket.cpp ../NETSEC-1/pcappacket.h \
