@@ -174,7 +174,7 @@ public:
         case ProtocolEnum::UNKNOWN:
         case ProtocolEnum::ETHERNET:
         case ProtocolEnum::ARP:
-            return isOk;
+            return isOk && !srcIp.isSet() && !srcPort.isSet() && !dstIp.isSet() && !dstPort.isSet();
         default:
             ipHdr = ((IPRaw*)packet->raw)->ipHeader;
             isOk &= srcIp.filter(ipHdr.saddr);
@@ -185,7 +185,7 @@ public:
         switch (packet->protocol) {
         case ProtocolEnum::IP:
         case ProtocolEnum::ICMP:
-            return isOk;
+            return isOk && !srcPort.isSet() && !dstPort.isSet();
         default:
             udpHdr = ((UDPRaw*)packet->raw)->udpHeader;
             isOk &= srcPort.filter(udpHdr.source);

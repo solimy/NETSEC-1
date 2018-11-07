@@ -15,12 +15,7 @@ PacketWriter::~PacketWriter()
 void PacketWriter::feed(const std::shared_ptr<PcapPacket> packet) {
     if (type != -1 && fd[type] > 0) {
         if (type == PCAP_FILE) {
-            struct pcap_pkthdr pkthdr;
-
-            pkthdr.len = pkthdr.caplen = packet->raw->pcapHeader.orig_len;
-            pkthdr.ts.tv_sec = packet->raw->pcapHeader.ts_sec;
-            write(fd[type], &pkthdr, sizeof(pkthdr));
-            write(fd[type], &(packet->raw->pcapPayload), sizeof(packet->raw->pcapPayload));
+            write(fd[type], packet->raw, sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len);
         }
         if (type == NETWORK) {
             EthernetRaw* eth_raw = (EthernetRaw*)(packet->raw);
@@ -51,7 +46,7 @@ void PacketWriter::startWriting(std::string const& file) {
     
     stopWriting();
     type = PCAP_FILE;
-    fd[type] = open(file.c_str(), O_APPEND | O_CREAT);
+    fd[type] = open(file.c_str(), O_RDWR | O_APPEND | O_CREAT);
     fh.magic = TCPDUMP_MAGIC;
     fh.sigfigs = 0;
     fh.version_major = PCAP_VERSION_MAJOR;
