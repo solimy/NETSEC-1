@@ -36,7 +36,7 @@ public:
     {
         if (CaptureOptions->objectName().isEmpty())
             CaptureOptions->setObjectName(QStringLiteral("CaptureOptions"));
-        CaptureOptions->resize(841, 278);
+        CaptureOptions->resize(841, 277);
         frame = new QFrame(CaptureOptions);
         frame->setObjectName(QStringLiteral("frame"));
         frame->setGeometry(QRect(350, 10, 161, 80));
@@ -74,7 +74,7 @@ public:
     {
         CaptureOptions->setWindowTitle(QApplication::translate("CaptureOptions", "Dialog", Q_NULLPTR));
         pushButton->setText(QApplication::translate("CaptureOptions", "Capture from Network", Q_NULLPTR));
-        pushButton_2->setText(QApplication::translate("CaptureOptions", "Capture from File", Q_NULLPTR));
+        pushButton_2->setText(QApplication::translate("CaptureOptions", "Load from File", Q_NULLPTR));
         pushButton_3->setText(QApplication::translate("CaptureOptions", "Stop Capture", Q_NULLPTR));
     } // retranslateUi
 

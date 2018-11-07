@@ -3,6 +3,7 @@
 
 #include "packetreader.h"
 #include <QDialog>
+#include <QLineEdit>
 
 namespace Ui {
 class CaptureOptions;
@@ -21,8 +22,6 @@ public:
         this->reader = reader;
     }
 
-    std::string file = "";
-
 private slots:
     void on_pushButton_clicked();
 
@@ -32,8 +31,11 @@ private slots:
 
     void on_pushButton_4_clicked();
 
+    void on_pushButton_2_clicked();
+
 private:
     Ui::CaptureOptions *ui;
+    QLineEdit* lineEdit;
 };
 
 #endif // CAPTUREOPTIONS_H

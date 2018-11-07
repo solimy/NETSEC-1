@@ -7,6 +7,7 @@ CaptureOptions::CaptureOptions(QWidget *parent) :
     ui(new Ui::CaptureOptions)
 {
     ui->setupUi(this);
+    lineEdit = findChild<QLineEdit*>(QString("lineEdit"),  Qt::FindChildrenRecursively);
 }
 
 CaptureOptions::~CaptureOptions()
@@ -33,4 +34,11 @@ void CaptureOptions::on_lineEdit_returnPressed()
 
 void CaptureOptions::on_pushButton_4_clicked()
 {
+}
+
+void CaptureOptions::on_pushButton_2_clicked()
+{
+    std::cout << "loading file " << lineEdit->text().toStdString() << std::endl;
+    reader->startCapture(lineEdit->text().toStdString());
+    close();
 }
