@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Packet details</string>
   </property>
-  <widget class="QPlainTextEdit" name="plainTextEdit">
+  <widget class="QTextEdit" name="plainTextEdit">
    <property name="geometry">
     <rect>
      <x>10</x>
