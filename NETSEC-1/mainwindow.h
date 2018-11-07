@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "packetreader.h"
+#include "packetwriter.h"
 #include "pcapfeeder.h"
 #include "filter.h"
 #include <deque>
@@ -264,11 +265,7 @@ public:
 
     virtual void feed(const std::shared_ptr<PcapPacket> packet) {
 
-        if (packet->protocol == ProtocolEnum::ETHERNET)
-            printf("fed with ETHERNET\n");
         if (filter.filter(packet)) {
-            if (packet->protocol == ProtocolEnum::ETHERNET)
-                printf("ETHERNET packet passed through the filter\n");
             if (packets.size()>20000) {
                 packets.clear();
                 while (packetTable->rowCount() > 0)
@@ -284,6 +281,7 @@ public:
     }
 
     PacketReader reader;
+    PacketWriter fileWriter;
     Filter filter;
 
 private slots:
@@ -294,6 +292,8 @@ private slots:
     void on_tableWidget_cellDoubleClicked(int row, int column);
 
     void on_lineEdit_editingFinished();
+
+    void on_radioButton_toggled(bool checked);
 
 private:
     Ui::MainWindow *ui;

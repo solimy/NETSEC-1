@@ -42,7 +42,6 @@ public:
 
         bool filter(T value) {
             if (isSet())
-                printf("%d, %d\n", *this->value, value);
                 switch (type) {
                 case OPT_TYPE::EQUALS:
                     return *this->value == value;

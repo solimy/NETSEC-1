@@ -19,6 +19,19 @@ class PacketDetails : public QDialog
 {
     Q_OBJECT
 
+    void hexdumpToSStream(std::stringstream& ss, uint8_t* raw, uint64_t rawLength) {
+        ss << std::hex;
+        for (int i = 0, j = rawLength; i < j; ++i) {
+            if (std::isprint(raw[i])) {
+                ss << raw[i];
+            } else {
+                ss << " Ox";
+                ss << (short)raw[i];
+                ss << " ";
+            }
+        }
+    }
+
 public:
     explicit PacketDetails(QWidget *parent = nullptr);
     ~PacketDetails();
@@ -66,13 +79,7 @@ public:
         ss << "pcapHeader.orig_len=" << pcapHeader.orig_len << "\n";
         if (packet->protocol == ProtocolEnum::UNKNOWN) {
             ss << "\n" << "~Payload~" << "\n";
-            ss << std::hex;
-            for (int i = 0, j = packet->raw->pcapHeader.incl_len; i < j; ++i) {
-                if (std::isprint(pcapRaw->pcapPayload[i]))
-                    ss << pcapRaw->pcapPayload[i] << " ";
-                else
-                    ss << "Ox" << (short)pcapRaw->pcapPayload[i] << " ";
-            }
+            hexdumpToSStream(ss, pcapRaw->pcapPayload, packet->raw->pcapHeader.incl_len);
             plainTextEdit->appendPlainText(ss.str().c_str());
             return;
         }
@@ -101,13 +108,7 @@ public:
             ss << "\n" << "~Payload~" << "\n";
             plainTextEdit->appendPlainText(ss.str().c_str());
             ss.str("");
-            ss << std::hex;
-            for (int i = 0, j = sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (EthernetRaw); i < j; ++i) {
-                if (std::isprint(ethRaw->ehternetPayload[i]))
-                    ss << ethRaw->ehternetPayload[i] << " ";
-                else
-                    ss << "Ox" << (short)ethRaw->ehternetPayload[i] << " ";
-            }
+            hexdumpToSStream(ss, ethRaw->ehternetPayload, sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (EthernetRaw));
             plainTextEdit->appendPlainText(ss.str().c_str());
             return;
         }
@@ -160,13 +161,7 @@ public:
         ss << "ipHeader.daddr=" << inet_ntoa(*(in_addr*)&ipHeader.daddr) << "\n";
         if (packet->protocol == ProtocolEnum::IP) {
             ss << "\n" << "~Payload~" << "\n";
-            ss << std::hex;
-            for (int i = 0, j = sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (IPRaw); i < j; ++i) {
-                if (std::isprint(ipRaw->ipPayload[i]))
-                    ss << ipRaw->ipPayload[i] << " ";
-                else
-                    ss << "Ox" << (short)ipRaw->ipPayload[i] << " ";
-            }
+            hexdumpToSStream(ss, ipRaw->ipPayload, sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (IPRaw));
             plainTextEdit->appendPlainText(ss.str().c_str());
             return;
         }
@@ -182,13 +177,7 @@ public:
             ss << "icmpHeader.un.gateway=" << inet_ntoa(*(in_addr*)&icmpHeader.un.gateway) << "\n";
             ss << "icmpHeader.un.frag.mtu=" << ntohs(icmpHeader.un.frag.mtu) << "\n";
             ss << "\n" << "~Payload~" << "\n";
-            ss << std::hex;
-            for (int i = 0, j = sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (ICMPRaw); i < j; ++i) {
-                if (std::isprint(icmpRaw->icmpPayload[i]))
-                    ss << icmpRaw->icmpPayload[i] << " ";
-                else
-                    ss << "Ox" << (short)icmpRaw->icmpPayload[i] << " ";
-            }
+            hexdumpToSStream(ss, icmpRaw->icmpPayload, sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (ICMPRaw));
             plainTextEdit->appendPlainText(ss.str().c_str());
             return;
         } else if (packet->protocol == ProtocolEnum::UDP ||
@@ -201,13 +190,7 @@ public:
             ss << "udpHeader.len=" << ntohs(udpHeader.len) << "\n";
             ss << "udpHeader.check=" << ntohs(udpHeader.check) << "\n";
             ss << "\n" << "~Payload~" << "\n";
-            ss << std::hex;
-            for (int i = 0, j = sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (UDPRaw); i < j; ++i) {
-                if (std::isprint(udpRaw->udpPayload[i]))
-                    ss << udpRaw->udpPayload[i] << " ";
-                else
-                    ss << "Ox" << (short)udpRaw->udpPayload[i] << " ";
-            }
+            hexdumpToSStream(ss, udpRaw->udpPayload, sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (UDPRaw));
             plainTextEdit->appendPlainText(ss.str().c_str());
             return;
         } else if (packet->protocol == ProtocolEnum::TCP ||
@@ -232,13 +215,7 @@ public:
             ss << "tcpHeader.check=" << ntohs(tcpHeader.check) << "\n";
             ss << "tcpHeader.urg_ptr=" << ntohs(tcpHeader.urg_ptr) << "\n";
             ss << "\n" << "~Payload~" << "\n";
-            ss << std::hex;
-            for (int i = 0, j = sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (TCPRaw); i < j; ++i) {
-                if (std::isprint(tcpRaw->tcpPayload[i]))
-                    ss << tcpRaw->tcpPayload[i] << " ";
-                else
-                    ss << "Ox" << (short)tcpRaw->tcpPayload[i] << " ";
-            }
+            hexdumpToSStream(ss, tcpRaw->tcpPayload, sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (TCPRaw));
             plainTextEdit->appendPlainText(ss.str().c_str());
             return;
         }

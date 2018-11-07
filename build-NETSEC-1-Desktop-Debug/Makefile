@@ -611,6 +611,8 @@ moc_mainwindow.cpp: ../NETSEC-1/packetreader.h \
 		../NETSEC-1/pcapfeeder.h \
 		../NETSEC-1/pcappacket.h \
 		../NETSEC-1/protocolenum.h \
+		../NETSEC-1/packetwriter.h \
+		../NETSEC-1/pcap.h \
 		../NETSEC-1/filter.h \
 		../NETSEC-1/mainwindow.h \
 		moc_predefs.h \
@@ -665,6 +667,8 @@ main.o: ../NETSEC-1/main.cpp ../NETSEC-1/mainwindow.h \
 		../NETSEC-1/pcapfeeder.h \
 		../NETSEC-1/pcappacket.h \
 		../NETSEC-1/protocolenum.h \
+		../NETSEC-1/packetwriter.h \
+		../NETSEC-1/pcap.h \
 		../NETSEC-1/filter.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../NETSEC-1/main.cpp
 
@@ -673,6 +677,8 @@ mainwindow.o: ../NETSEC-1/mainwindow.cpp ../NETSEC-1/mainwindow.h \
 		../NETSEC-1/pcapfeeder.h \
 		../NETSEC-1/pcappacket.h \
 		../NETSEC-1/protocolenum.h \
+		../NETSEC-1/packetwriter.h \
+		../NETSEC-1/pcap.h \
 		../NETSEC-1/filter.h \
 		ui_mainwindow.h \
 		../NETSEC-1/captureoptions.h \
@@ -708,6 +714,8 @@ captureoptions.o: ../NETSEC-1/captureoptions.cpp ../NETSEC-1/captureoptions.h \
 		../NETSEC-1/protocolenum.h \
 		ui_captureoptions.h \
 		../NETSEC-1/mainwindow.h \
+		../NETSEC-1/packetwriter.h \
+		../NETSEC-1/pcap.h \
 		../NETSEC-1/filter.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o captureoptions.o ../NETSEC-1/captureoptions.cpp
 
