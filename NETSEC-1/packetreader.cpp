@@ -51,11 +51,13 @@ void PacketReader::captureFromFile(std::string const& file) {
 
             memset(buffer, 0, 65536);
             ret = read(fd, &pcap_hdr, sizeof(pcaprec_hdr_t));
-            ret = read(fd, &buffer, pcap_hdr.incl_len);
-            std::shared_ptr<PcapPacket> packet = std::make_shared<PcapPacket>(buffer, pcap_hdr.incl_len);
-            packet->raw->pcapHeader.ts_sec = pcap_hdr.ts_sec;
-            packet->raw->pcapHeader.ts_usec = pcap_hdr.ts_usec;
-            feedSubscribers(packet);
+            if (ret == sizeof(pcaprec_hdr_t)) {
+                ret = read(fd, &buffer, pcap_hdr.incl_len);
+                std::shared_ptr<PcapPacket> packet = std::make_shared<PcapPacket>(buffer, pcap_hdr.incl_len);
+                packet->raw->pcapHeader.ts_sec = pcap_hdr.ts_sec;
+                packet->raw->pcapHeader.ts_usec = pcap_hdr.ts_usec;
+                feedSubscribers(packet);
+            }
         }
     }
 }
