@@ -89,7 +89,6 @@ unsigned char* ConverMacAddressStringIntoByte
         unsigned int iNumber = 0;
         char ch;
 
-        //Convert letter into lower case.
         ch = tolower (*pszMACAddress++);
 
         if ((ch < '0' || ch > '9') && (ch < 'a' || ch > 'f'))
@@ -97,14 +96,10 @@ unsigned char* ConverMacAddressStringIntoByte
             return NULL;
         }
 
-        //Convert into number.
-        //       a. If character is digit then ch - '0'
-        //	b. else (ch - 'a' + 10) it is done
-        //	because addition of 10 takes correct value.
         iNumber = isdigit (ch) ? (ch - '0') : (ch - 'a' + 10);
         ch = tolower (*pszMACAddress);
 
-        if ((iConunter < 5 && ch != '-') ||
+        if ((iConunter < 5 && ch != '-' && ch != ':') ||
             (iConunter == 5 && ch != '\0' && !isspace (ch)))
         {
             ++pszMACAddress;
@@ -118,14 +113,12 @@ unsigned char* ConverMacAddressStringIntoByte
             iNumber += isdigit (ch) ? (ch - '0') : (ch - 'a' + 10);
             ch = *pszMACAddress;
 
-            if (iConunter < 5 && ch != '-')
+            if (iConunter < 5 && ch != '-' && ch != ':')
             {
                 return NULL;
             }
         }
-        /* Store result.  */
         pbyAddress[iConunter] = (unsigned char) iNumber;
-        /* Skip cSep.  */
         ++pszMACAddress;
     }
     return pbyAddress;
