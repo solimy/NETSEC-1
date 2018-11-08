@@ -136,15 +136,19 @@ void MainWindow::on_pushButton_clicked()
     std::shared_ptr<PcapPacket> arpPacket = std::make_shared<PcapPacket>(new ARPRaw());
     ARPRaw* arpRaw = (ARPRaw*)arpPacket->raw;
     arpPacket->raw->pcapHeader.incl_len = sizeof (ARPRaw) - sizeof (PcapRaw);
-    arpRaw->arpHeader.hlen = htons(6);
-    arpRaw->arpHeader.plen = htons(4);
+    arpRaw->ehternetHeader.h_proto = htons(ETHERTYPE_ARP);
+    arpRaw->arpHeader.hlen = 6;
+    arpRaw->arpHeader.plen = 4;
     arpRaw->arpHeader.htype = htons(1);
+    arpRaw->arpHeader.ptype = htons(ETHERTYPE_IP);
 
     arpRaw->arpHeader.opcode = htons(std::stoi(arpOp->text().toStdString()));
     ConverMacAddressStringIntoByte(arpHwsrc->text().toStdString().c_str(), arpRaw->arpHeader.sender_mac);
     *(unsigned int*)(&arpRaw->arpHeader.sender_ip) = inet_addr(arpPsrc->text().toStdString().c_str());
     ConverMacAddressStringIntoByte(arpHwdst->text().toStdString().c_str(), arpRaw->arpHeader.target_mac);
     *(unsigned int*)(&arpRaw->arpHeader.target_ip) = inet_addr(arpPdst->text().toStdString().c_str());
+
+    memcpy(arpRaw->ehternetHeader.h_dest, arpRaw->arpHeader.target_mac, 6);
 
     forceFeed(&netWriter, arpPacket);
 }

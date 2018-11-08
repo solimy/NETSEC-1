@@ -192,9 +192,9 @@ public:
         label_2->setText(QApplication::translate("MainWindow", "opcode", 0));
         lineEdit_2->setText(QApplication::translate("MainWindow", "1", 0));
         label_3->setText(QApplication::translate("MainWindow", "hwsrc", 0));
-        lineEdit_3->setText(QApplication::translate("MainWindow", "00-00-00-00-00-00", 0));
+        lineEdit_3->setText(QApplication::translate("MainWindow", "FF-FF-FF-FF-FF-FF", 0));
         label_4->setText(QApplication::translate("MainWindow", "hwdst", 0));
-        lineEdit_4->setText(QApplication::translate("MainWindow", "00-00-00-00-00-00", 0));
+        lineEdit_4->setText(QApplication::translate("MainWindow", "FF-FF-FF-FF-FF-FF", 0));
         label_5->setText(QApplication::translate("MainWindow", "pdst", 0));
         label_6->setText(QApplication::translate("MainWindow", "psrc", 0));
         lineEdit_5->setText(QApplication::translate("MainWindow", "0.0.0.0", 0));

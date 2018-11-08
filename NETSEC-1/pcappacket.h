@@ -196,6 +196,7 @@ public:
 
     ProtocolEnum protocol;
     PcapRaw* raw;
+    std::string interface;
 };
 
 #endif // PCAPPACKET_H

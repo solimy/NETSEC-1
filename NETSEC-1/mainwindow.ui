@@ -210,7 +210,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>00-00-00-00-00-00</string>
+         <string>FF-FF-FF-FF-FF-FF</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_4">
@@ -236,7 +236,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>00-00-00-00-00-00</string>
+         <string>FF-FF-FF-FF-FF-FF</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_5">
