@@ -262,6 +262,11 @@ public:
     std::unordered_map<int, std::shared_ptr<PcapPacket>> packets;
     QTableWidget* packetTable;
     QLineEdit* lineEdit;
+    QLineEdit* arpOp;
+    QLineEdit* arpHwsrc;
+    QLineEdit* arpPsrc;
+    QLineEdit* arpHwdst;
+    QLineEdit* arpPdst;
 
     virtual void feed(const std::shared_ptr<PcapPacket> packet) {
 
@@ -295,6 +300,8 @@ private slots:
     void on_lineEdit_editingFinished();
 
     void on_radioButton_toggled(bool checked);
+
+    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;

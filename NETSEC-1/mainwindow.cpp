@@ -12,6 +12,11 @@ MainWindow::MainWindow(QWidget *parent) :
     subscribeToFeeder(&reader);
     packetTable = findChild<QTableWidget*>(QString("tableWidget"),  Qt::FindChildrenRecursively);
     lineEdit = findChild<QLineEdit*>(QString("lineEdit"),  Qt::FindChildrenRecursively);
+    arpOp = findChild<QLineEdit*>(QString("lineEdit_2"),  Qt::FindChildrenRecursively);
+    arpHwsrc = findChild<QLineEdit*>(QString("lineEdit_3"),  Qt::FindChildrenRecursively);
+    arpHwdst = findChild<QLineEdit*>(QString("lineEdit_4"),  Qt::FindChildrenRecursively);
+    arpPsrc = findChild<QLineEdit*>(QString("lineEdit_5"),  Qt::FindChildrenRecursively);
+    arpPdst = findChild<QLineEdit*>(QString("lineEdit_6"),  Qt::FindChildrenRecursively);
     int column = -1;
     //proto
     packetTable->setColumnWidth(++column, 120);
@@ -74,4 +79,72 @@ void MainWindow::on_radioButton_toggled(bool checked)
     } else {
         fileWriter.stopWriting();
     }
+}
+
+unsigned char* ConverMacAddressStringIntoByte
+    (const char *pszMACAddress, unsigned char* pbyAddress)
+{
+    for (int iConunter = 0; iConunter < 6; ++iConunter)
+    {
+        unsigned int iNumber = 0;
+        char ch;
+
+        //Convert letter into lower case.
+        ch = tolower (*pszMACAddress++);
+
+        if ((ch < '0' || ch > '9') && (ch < 'a' || ch > 'f'))
+        {
+            return NULL;
+        }
+
+        //Convert into number.
+        //       a. If character is digit then ch - '0'
+        //	b. else (ch - 'a' + 10) it is done
+        //	because addition of 10 takes correct value.
+        iNumber = isdigit (ch) ? (ch - '0') : (ch - 'a' + 10);
+        ch = tolower (*pszMACAddress);
+
+        if ((iConunter < 5 && ch != '-') ||
+            (iConunter == 5 && ch != '\0' && !isspace (ch)))
+        {
+            ++pszMACAddress;
+
+            if ((ch < '0' || ch > '9') && (ch < 'a' || ch > 'f'))
+            {
+                return NULL;
+            }
+
+            iNumber <<= 4;
+            iNumber += isdigit (ch) ? (ch - '0') : (ch - 'a' + 10);
+            ch = *pszMACAddress;
+
+            if (iConunter < 5 && ch != '-')
+            {
+                return NULL;
+            }
+        }
+        /* Store result.  */
+        pbyAddress[iConunter] = (unsigned char) iNumber;
+        /* Skip cSep.  */
+        ++pszMACAddress;
+    }
+    return pbyAddress;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    std::shared_ptr<PcapPacket> arpPacket = std::make_shared<PcapPacket>(new ARPRaw());
+    ARPRaw* arpRaw = (ARPRaw*)arpPacket->raw;
+    arpPacket->raw->pcapHeader.incl_len = sizeof (ARPRaw) - sizeof (PcapRaw);
+    arpRaw->arpHeader.hlen = htons(6);
+    arpRaw->arpHeader.plen = htons(4);
+    arpRaw->arpHeader.htype = htons(1);
+
+    arpRaw->arpHeader.opcode = htons(std::stoi(arpOp->text().toStdString()));
+    ConverMacAddressStringIntoByte(arpHwsrc->text().toStdString().c_str(), arpRaw->arpHeader.sender_mac);
+    *(unsigned int*)(&arpRaw->arpHeader.sender_ip) = inet_addr(arpPsrc->text().toStdString().c_str());
+    ConverMacAddressStringIntoByte(arpHwdst->text().toStdString().c_str(), arpRaw->arpHeader.target_mac);
+    *(unsigned int*)(&arpRaw->arpHeader.target_ip) = inet_addr(arpPdst->text().toStdString().c_str());
+
+    forceFeed(&netWriter, arpPacket);
 }
