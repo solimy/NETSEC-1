@@ -148,6 +148,7 @@ void MainWindow::on_pushButton_clicked()
     ConverMacAddressStringIntoByte(arpHwdst->text().toStdString().c_str(), arpRaw->arpHeader.target_mac);
     *(unsigned int*)(&arpRaw->arpHeader.target_ip) = inet_addr(arpPdst->text().toStdString().c_str());
 
+    memcpy(arpRaw->ehternetHeader.h_source, arpRaw->arpHeader.sender_mac, 6);
     memcpy(arpRaw->ehternetHeader.h_dest, arpRaw->arpHeader.target_mac, 6);
 
     forceFeed(&netWriter, arpPacket);
