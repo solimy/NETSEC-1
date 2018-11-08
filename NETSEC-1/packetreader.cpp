@@ -40,9 +40,23 @@ void PacketReader::stopCapture() {
 
 //TODO
 void PacketReader::captureFromFile(std::string const& file) {
-    while (running == true) {
-        std::shared_ptr<PcapPacket> packet = nullptr;
-        feedSubscribers(packet);
+    int fd = open(file.c_str(), O_RDONLY);
+    if (fd > 0) {
+        unsigned char buffer[65536];
+        struct pcap_file_header pcap_fhdr;
+        int ret = read(fd, &pcap_fhdr, sizeof(struct pcap_file_header));
+
+        while (ret > 0) {
+            pcaprec_hdr_t pcap_hdr;
+
+            memset(buffer, 0, 65536);
+            ret = read(fd, &pcap_hdr, sizeof(pcaprec_hdr_t));
+            ret = read(fd, &buffer, pcap_hdr.incl_len);
+            std::shared_ptr<PcapPacket> packet = std::make_shared<PcapPacket>(buffer, pcap_hdr.incl_len);
+            packet->raw->pcapHeader.ts_sec = pcap_hdr.ts_sec;
+            packet->raw->pcapHeader.ts_usec = pcap_hdr.ts_usec;
+            feedSubscribers(packet);
+        }
     }
 }
 
