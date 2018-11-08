@@ -155,7 +155,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
@@ -164,21 +164,21 @@
        <widget class="QLabel" name="label_2">
         <property name="geometry">
          <rect>
-          <x>110</x>
-          <y>90</y>
+          <x>430</x>
+          <y>40</y>
           <width>52</width>
           <height>21</height>
          </rect>
         </property>
         <property name="text">
-         <string>opcode</string>
+         <string>arpOp</string>
         </property>
        </widget>
        <widget class="QLineEdit" name="lineEdit_2">
         <property name="geometry">
          <rect>
-          <x>160</x>
-          <y>90</y>
+          <x>480</x>
+          <y>40</y>
           <width>113</width>
           <height>22</height>
          </rect>
@@ -191,7 +191,7 @@
         <property name="geometry">
          <rect>
           <x>110</x>
-          <y>150</y>
+          <y>100</y>
           <width>52</width>
           <height>21</height>
          </rect>
@@ -204,7 +204,7 @@
         <property name="geometry">
          <rect>
           <x>160</x>
-          <y>150</y>
+          <y>100</y>
           <width>181</width>
           <height>22</height>
          </rect>
@@ -217,7 +217,7 @@
         <property name="geometry">
          <rect>
           <x>110</x>
-          <y>210</y>
+          <y>160</y>
           <width>52</width>
           <height>21</height>
          </rect>
@@ -230,7 +230,7 @@
         <property name="geometry">
          <rect>
           <x>160</x>
-          <y>210</y>
+          <y>160</y>
           <width>181</width>
           <height>22</height>
          </rect>
@@ -243,7 +243,7 @@
         <property name="geometry">
          <rect>
           <x>360</x>
-          <y>210</y>
+          <y>160</y>
           <width>52</width>
           <height>21</height>
          </rect>
@@ -256,7 +256,7 @@
         <property name="geometry">
          <rect>
           <x>360</x>
-          <y>150</y>
+          <y>100</y>
           <width>52</width>
           <height>21</height>
          </rect>
@@ -269,7 +269,7 @@
         <property name="geometry">
          <rect>
           <x>410</x>
-          <y>150</y>
+          <y>100</y>
           <width>181</width>
           <height>22</height>
          </rect>
@@ -282,7 +282,7 @@
         <property name="geometry">
          <rect>
           <x>410</x>
-          <y>210</y>
+          <y>160</y>
           <width>181</width>
           <height>22</height>
          </rect>
@@ -295,7 +295,7 @@
         <property name="geometry">
          <rect>
           <x>110</x>
-          <y>290</y>
+          <y>240</y>
           <width>481</width>
           <height>61</height>
          </rect>
@@ -335,6 +335,214 @@
        <attribute name="title">
         <string>UDP</string>
        </attribute>
+       <widget class="QLabel" name="label_8">
+        <property name="geometry">
+         <rect>
+          <x>110</x>
+          <y>40</y>
+          <width>91</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>interface name</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_8">
+        <property name="geometry">
+         <rect>
+          <x>210</x>
+          <y>40</y>
+          <width>161</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_9">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>160</y>
+          <width>181</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>0.0.0.0</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_10">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>100</y>
+          <width>181</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>FF-FF-FF-FF-FF-FF</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="geometry">
+         <rect>
+          <x>110</x>
+          <y>240</y>
+          <width>641</width>
+          <height>61</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>SEND</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_9">
+        <property name="geometry">
+         <rect>
+          <x>110</x>
+          <y>100</y>
+          <width>52</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>hwsrc</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_11">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>100</y>
+          <width>181</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>0.0.0.0</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_12">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>160</y>
+          <width>181</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>FF-FF-FF-FF-FF-FF</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_10">
+        <property name="geometry">
+         <rect>
+          <x>110</x>
+          <y>160</y>
+          <width>52</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>hwdst</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_11">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>100</y>
+          <width>52</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>ipsrc</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_12">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>160</y>
+          <width>52</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>ipdst</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_13">
+        <property name="geometry">
+         <rect>
+          <x>660</x>
+          <y>100</y>
+          <width>91</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_14">
+        <property name="geometry">
+         <rect>
+          <x>660</x>
+          <y>160</y>
+          <width>91</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_13">
+        <property name="geometry">
+         <rect>
+          <x>610</x>
+          <y>160</y>
+          <width>52</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>portdst</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_14">
+        <property name="geometry">
+         <rect>
+          <x>610</x>
+          <y>100</y>
+          <width>52</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>portsrc</string>
+        </property>
+       </widget>
+       <widget class="QPlainTextEdit" name="plainTextEdit">
+        <property name="geometry">
+         <rect>
+          <x>810</x>
+          <y>100</y>
+          <width>431</width>
+          <height>201</height>
+         </rect>
+        </property>
+        <property name="plainText">
+         <string>~Payload~</string>
+        </property>
+       </widget>
       </widget>
      </widget>
     </widget>
