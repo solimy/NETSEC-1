@@ -282,6 +282,7 @@ public:
 
     PacketReader reader;
     PacketWriter fileWriter;
+    PacketWriter netWriter;
     Filter filter;
 
 private slots:

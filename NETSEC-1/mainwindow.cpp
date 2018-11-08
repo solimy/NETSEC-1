@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //dst port
     packetTable->setColumnWidth(++column, 120);
     fileWriter.subscribeToFeeder(this);
+    netWriter.startWriting();
 }
 
 MainWindow::~MainWindow()

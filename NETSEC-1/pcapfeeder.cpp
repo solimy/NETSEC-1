@@ -29,6 +29,9 @@ void PcapFeeder::unsubscribe(PcapFeedable* feedable) {
     subscribers.erase(feedable);
 }
 
+void PcapFeeder::forceFeed(PcapFeedable* victim, std::shared_ptr<PcapPacket> packet) {
+    victim->safeFeed(packet);
+}
 
 void PcapFeeder::feedSubscribers(std::shared_ptr<PcapPacket> packet) {
     std::lock_guard<std::mutex> lock(subscribersSafety);

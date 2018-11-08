@@ -57,6 +57,7 @@ protected:
      * @threadsafe
      */
     void feedSubscribers(std::shared_ptr<PcapPacket> packet);
+    void forceFeed(PcapFeedable* victim, std::shared_ptr<PcapPacket> packet);
 
 private:
     std::mutex subscribersSafety;
