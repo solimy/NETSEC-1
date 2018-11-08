@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
@@ -38,6 +39,7 @@ public:
     QRadioButton *radioButton;
     QTableWidget *tableWidget;
     QWidget *tab_2;
+    QComboBox *comboBox;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -91,6 +93,9 @@ public:
         tabWidget->addTab(tab, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName(QStringLiteral("tab_2"));
+        comboBox = new QComboBox(tab_2);
+        comboBox->setObjectName(QStringLiteral("comboBox"));
+        comboBox->setGeometry(QRect(10, 10, 72, 22));
         tabWidget->addTab(tab_2, QString());
         MainWindow->setCentralWidget(centralWidget);
         statusBar = new QStatusBar(MainWindow);
@@ -109,7 +114,7 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "NETSEC-1", 0));
         toolButton->setText(QApplication::translate("MainWindow", "Options", 0));
-        lineEdit->setText(QApplication::translate("MainWindow", "proto=null srcIp=null dstIp=null srcPort=null dstPort=null", 0));
+        lineEdit->setText(QApplication::translate("MainWindow", "proto==null srcIp==null dstIp==null srcPort==null dstPort==null", 0));
         label->setText(QApplication::translate("MainWindow", "Filters", 0));
         radioButton->setText(QApplication::translate("MainWindow", "saveToFile", 0));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
@@ -131,6 +136,11 @@ public:
         QTableWidgetItem *___qtablewidgetitem8 = tableWidget->horizontalHeaderItem(8);
         ___qtablewidgetitem8->setText(QApplication::translate("MainWindow", "destination port", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "packet capture", 0));
+        comboBox->clear();
+        comboBox->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "ARP", 0)
+         << QApplication::translate("MainWindow", "UDP", 0)
+        );
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "packet forging", 0));
     } // retranslateUi
 

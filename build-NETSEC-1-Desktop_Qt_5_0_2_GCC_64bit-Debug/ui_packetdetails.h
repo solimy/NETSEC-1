@@ -15,21 +15,21 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QPlainTextEdit>
+#include <QtWidgets/QTextEdit>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_PacketDetails
 {
 public:
-    QPlainTextEdit *plainTextEdit;
+    QTextEdit *plainTextEdit;
 
     void setupUi(QDialog *PacketDetails)
     {
         if (PacketDetails->objectName().isEmpty())
             PacketDetails->setObjectName(QStringLiteral("PacketDetails"));
         PacketDetails->resize(558, 648);
-        plainTextEdit = new QPlainTextEdit(PacketDetails);
+        plainTextEdit = new QTextEdit(PacketDetails);
         plainTextEdit->setObjectName(QStringLiteral("plainTextEdit"));
         plainTextEdit->setGeometry(QRect(10, 10, 541, 631));
 

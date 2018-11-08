@@ -196,24 +196,17 @@ public:
         } else if (packet->protocol == ProtocolEnum::TCP ||
                    packet->protocol == ProtocolEnum::HTTP){
             TCPRaw* tcpRaw = (TCPRaw*)packet->raw;
-            tcphdr tcpHeader = tcpRaw->tcpHeader;
+            _tcp_header tcpHeader = tcpRaw->tcpHeader;
             ss << "<br/>" << "~TCP Header~" << "<br/>";
-            ss << "tcpHeader.source=" << ntohs(tcpHeader.source) << "<br/>";
-            ss << "tcpHeader.dest=" << ntohs(tcpHeader.dest) << "<br/>";
-            ss << "tcpHeader.seq=" << ntohs(tcpHeader.seq) << "<br/>";
-            ss << "tcpHeader.ack_seq=" << ntohs(tcpHeader.ack_seq) << "<br/>";
-            ss << "tcpHeader.res1=" << ntohs(tcpHeader.res1) << "<br/>";
-            ss << "tcpHeader.doff=" << ntohs(tcpHeader.doff) << "<br/>";
-            ss << "tcpHeader.fin=" << ntohs(tcpHeader.fin) << "<br/>";
-            ss << "tcpHeader.syn=" << ntohs(tcpHeader.syn) << "<br/>";
-            ss << "tcpHeader.rst=" << ntohs(tcpHeader.rst) << "<br/>";
-            ss << "tcpHeader.psh=" << ntohs(tcpHeader.psh) << "<br/>";
-            ss << "tcpHeader.ack=" << ntohs(tcpHeader.ack) << "<br/>";
-            ss << "tcpHeader.urg=" << ntohs(tcpHeader.urg) << "<br/>";
-            ss << "tcpHeader.res2=" << ntohs(tcpHeader.res2) << "<br/>";
-            ss << "tcpHeader.window=" << ntohs(tcpHeader.window) << "<br/>";
-            ss << "tcpHeader.check=" << ntohs(tcpHeader.check) << "<br/>";
-            ss << "tcpHeader.urg_ptr=" << ntohs(tcpHeader.urg_ptr) << "<br/>";
+            ss << "tcpHeader.src_port=" << ntohs(tcpHeader.src_port) << "<br/>";
+            ss << "tcpHeader.dst_port=" << ntohs(tcpHeader.dst_port) << "<br/>";
+            ss << "tcpHeader.seq=" << ntohl(tcpHeader.seq) << "<br/>";
+            ss << "tcpHeader.ack=" << ntohl(tcpHeader.ack) << "<br/>";
+            ss << "tcpHeader.data_offset=" << (short)tcpHeader.data_offset << "<br/>";
+            ss << "tcpHeader.flags=" << (short)tcpHeader.flags << "<br/>";
+            ss << "tcpHeader.window_size=" << ntohs(tcpHeader.window_size) << "<br/>";
+            ss << "tcpHeader.checksum=" << ntohs(tcpHeader.checksum) << "<br/>";
+            ss << "tcpHeader.urgent_p=" << ntohs(tcpHeader.urgent_p) << "<br/>";
             ss << "<br/>" << "~Payload~" << "<br/>";
             hexdumpToSStream(ss, tcpRaw->tcpPayload, sizeof(PcapRaw) + packet->raw->pcapHeader.incl_len - sizeof (TCPRaw));
             plainTextEdit->setHtml(ss.str().c_str());

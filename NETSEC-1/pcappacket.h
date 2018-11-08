@@ -46,6 +46,26 @@ struct _udphdr
   u_int16_t len;
   u_int16_t check;
 }__attribute__((packed));
+
+struct _tcp_header {
+    u_int16_t src_port;		/* source port */
+    u_int16_t dst_port;		/* destination port */
+    tcp_seq seq;		/* sequence number */
+    tcp_seq ack;		/* acknowledgement number */
+# if __BYTE_ORDER == __LITTLE_ENDIAN
+    u_int8_t th_x2:4;		/* (unused) */
+    u_int8_t data_offset:4;		/* data offset */
+# endif
+# if __BYTE_ORDER == __BIG_ENDIAN
+    u_int8_t data_offset:4;		/* data offset */
+    u_int8_t th_x2:4;		/* (unused) */
+# endif
+    u_int8_t flags;
+    u_int16_t window_size;		/* window */
+    u_int16_t checksum;		/* checksum */
+    u_int16_t urgent_p;		/* urgent pointer */
+} __attribute__((packed));
+
 //UNKNOWN
 struct PcapRaw {
     pcaprec_hdr_t pcapHeader;
@@ -78,7 +98,7 @@ struct ICMPRaw : public IPRaw {
 
 //TCP
 struct TCPRaw : public IPRaw {
-    tcphdr tcpHeader;
+    _tcp_header tcpHeader;
     uint8_t tcpPayload[0];
 } __attribute__((packed));
 
