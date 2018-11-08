@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     arpHwdst = findChild<QLineEdit*>(QString("lineEdit_4"),  Qt::FindChildrenRecursively);
     arpPsrc = findChild<QLineEdit*>(QString("lineEdit_5"),  Qt::FindChildrenRecursively);
     arpPdst = findChild<QLineEdit*>(QString("lineEdit_6"),  Qt::FindChildrenRecursively);
+    arpInterface = findChild<QLineEdit*>(QString("lineEdit_7"),  Qt::FindChildrenRecursively);
     int column = -1;
     //proto
     packetTable->setColumnWidth(++column, 120);
@@ -127,8 +128,10 @@ unsigned char* ConverMacAddressStringIntoByte
 void MainWindow::on_pushButton_clicked()
 {
     std::shared_ptr<PcapPacket> arpPacket = std::make_shared<PcapPacket>(new ARPRaw());
-    ARPRaw* arpRaw = (ARPRaw*)arpPacket->raw;
     arpPacket->raw->pcapHeader.incl_len = sizeof (ARPRaw) - sizeof (PcapRaw);
+    arpPacket->interface = arpInterface->text().toStdString();
+
+    ARPRaw* arpRaw = (ARPRaw*)arpPacket->raw;
     arpRaw->ehternetHeader.h_proto = htons(ETHERTYPE_ARP);
     arpRaw->arpHeader.hlen = 6;
     arpRaw->arpHeader.plen = 4;

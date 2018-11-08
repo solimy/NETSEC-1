@@ -52,6 +52,8 @@ public:
     QLineEdit *lineEdit_5;
     QLineEdit *lineEdit_6;
     QPushButton *pushButton;
+    QLineEdit *lineEdit_7;
+    QLabel *label_7;
     QWidget *tab_4;
     QStatusBar *statusBar;
 
@@ -113,10 +115,10 @@ public:
         tab_3->setObjectName(QStringLiteral("tab_3"));
         label_2 = new QLabel(tab_3);
         label_2->setObjectName(QStringLiteral("label_2"));
-        label_2->setGeometry(QRect(110, 80, 52, 21));
+        label_2->setGeometry(QRect(110, 90, 52, 21));
         lineEdit_2 = new QLineEdit(tab_3);
         lineEdit_2->setObjectName(QStringLiteral("lineEdit_2"));
-        lineEdit_2->setGeometry(QRect(160, 80, 113, 22));
+        lineEdit_2->setGeometry(QRect(160, 90, 113, 22));
         label_3 = new QLabel(tab_3);
         label_3->setObjectName(QStringLiteral("label_3"));
         label_3->setGeometry(QRect(110, 150, 52, 21));
@@ -144,6 +146,12 @@ public:
         pushButton = new QPushButton(tab_3);
         pushButton->setObjectName(QStringLiteral("pushButton"));
         pushButton->setGeometry(QRect(110, 290, 481, 61));
+        lineEdit_7 = new QLineEdit(tab_3);
+        lineEdit_7->setObjectName(QStringLiteral("lineEdit_7"));
+        lineEdit_7->setGeometry(QRect(210, 40, 161, 22));
+        label_7 = new QLabel(tab_3);
+        label_7->setObjectName(QStringLiteral("label_7"));
+        label_7->setGeometry(QRect(110, 40, 91, 21));
         tabWidget_2->addTab(tab_3, QString());
         tab_4 = new QWidget();
         tab_4->setObjectName(QStringLiteral("tab_4"));
@@ -200,6 +208,8 @@ public:
         lineEdit_5->setText(QApplication::translate("MainWindow", "0.0.0.0", 0));
         lineEdit_6->setText(QApplication::translate("MainWindow", "0.0.0.0", 0));
         pushButton->setText(QApplication::translate("MainWindow", "SEND", 0));
+        lineEdit_7->setText(QString());
+        label_7->setText(QApplication::translate("MainWindow", "interface name", 0));
         tabWidget_2->setTabText(tabWidget_2->indexOf(tab_3), QApplication::translate("MainWindow", "ARP", 0));
         tabWidget_2->setTabText(tabWidget_2->indexOf(tab_4), QApplication::translate("MainWindow", "UDP", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "packet forging", 0));

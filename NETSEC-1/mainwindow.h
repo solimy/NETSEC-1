@@ -262,6 +262,7 @@ public:
     std::unordered_map<int, std::shared_ptr<PcapPacket>> packets;
     QTableWidget* packetTable;
     QLineEdit* lineEdit;
+    QLineEdit* arpInterface;
     QLineEdit* arpOp;
     QLineEdit* arpHwsrc;
     QLineEdit* arpPsrc;

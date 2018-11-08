@@ -41,7 +41,7 @@ void PacketWriter::feed(const std::shared_ptr<PcapPacket> packet) {
             sockaddr_ll socket_address;
             socket_address.sll_hatype = AF_PACKET;
             socket_address.sll_halen = ETH_ALEN;
-            socket_address.sll_ifindex = 3;//TODO
+            socket_address.sll_ifindex = if_nametoindex(packet->interface.c_str());
             memcpy(socket_address.sll_addr, eth_raw->ehternetHeader.h_dest, 6);
             sendto(fd[type], packet->raw->pcapPayload, packet->raw->pcapHeader.incl_len, 0, (sockaddr*)&socket_address, sizeof(socket_address));
             printf("ifindex=%d %s\n", socket_address.sll_ifindex, strerror(errno));
