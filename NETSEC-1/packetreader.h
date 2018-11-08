@@ -5,7 +5,12 @@
 #include <string>
 #include <atomic>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #include "pcapfeeder.h"
+#include "pcap.h"
 
 class PacketReader : public PcapFeeder
 {
