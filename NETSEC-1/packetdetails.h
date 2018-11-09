@@ -148,12 +148,12 @@ public:
         IPRaw* ipRaw = (IPRaw*)packet->raw;
         iphdr ipHeader = ipRaw->ipHeader;
         ss << "<br/>" << "~IP Header~" << "<br/>";
-        ss << "ipHeader.ihl=" << ntohs(ipHeader.ihl) << "<br/>";
-        ss << "ipHeader.version=" << ntohs(ipHeader.version) << "<br/>";
+        ss << "ipHeader.ihl=" << std::dec << (short)ipHeader.ihl << "<br/>";
+        ss << "ipHeader.version=" << (short)ipHeader.version << "<br/>";
         ss << "ipHeader.tos=" << (short)ipHeader.tos << "<br/>";
         ss << "ipHeader.tot_len=" << ntohs(ipHeader.tot_len) << "<br/>";
-        ss << "ipHeader.id=" << ntohs(ipHeader.id) << "<br/>";
-        ss << "ipHeader.frag_off=" << ntohs(ipHeader.frag_off) << "<br/>";
+        ss << "ipHeader.id=" << (short)ipHeader.id << "<br/>";
+        ss << "ipHeader.frag_off=" << (short)ipHeader.frag_off << "<br/>";
         ss << "ipHeader.ttl=" << (short)ipHeader.ttl << "<br/>";
         ss << "ipHeader.protocol=0x" << std::hex << (short)ipHeader.protocol << std::dec << "<br/>";
         ss << "ipHeader.check=" << ntohs(ipHeader.check) << "<br/>";

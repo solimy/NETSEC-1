@@ -14,6 +14,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <QPlainTextEdit>
 
 namespace Ui {
 class MainWindow;
@@ -268,6 +269,14 @@ public:
     QLineEdit* arpPsrc;
     QLineEdit* arpHwdst;
     QLineEdit* arpPdst;
+    QLineEdit* udpInterface;
+    QLineEdit* udpHwsrc;
+    QLineEdit* udpIpsrc;
+    QLineEdit* udpPortsrc;
+    QLineEdit* udpHwdst;
+    QLineEdit* udpIpdst;
+    QLineEdit* udpPortdst;
+    QPlainTextEdit* udpPayload;
 
     virtual void feed(const std::shared_ptr<PcapPacket> packet) {
 
@@ -303,6 +312,8 @@ private slots:
     void on_radioButton_toggled(bool checked);
 
     void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
 
 private:
     Ui::MainWindow *ui;

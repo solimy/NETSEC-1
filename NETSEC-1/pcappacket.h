@@ -197,6 +197,11 @@ public:
     ProtocolEnum protocol;
     PcapRaw* raw;
     std::string interface;
+
+    template<typename T>
+    static T* forgeRaw(uint64_t paylodLen) {
+        return (T*) malloc(sizeof (T) + paylodLen);
+    }
 };
 
 #endif // PCAPPACKET_H

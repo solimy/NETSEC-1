@@ -18,6 +18,14 @@ MainWindow::MainWindow(QWidget *parent) :
     arpPsrc = findChild<QLineEdit*>(QString("lineEdit_5"),  Qt::FindChildrenRecursively);
     arpPdst = findChild<QLineEdit*>(QString("lineEdit_6"),  Qt::FindChildrenRecursively);
     arpInterface = findChild<QLineEdit*>(QString("lineEdit_7"),  Qt::FindChildrenRecursively);
+    udpInterface = findChild<QLineEdit*>(QString("lineEdit_8"),  Qt::FindChildrenRecursively);
+    udpHwsrc = findChild<QLineEdit*>(QString("lineEdit_10"),  Qt::FindChildrenRecursively);
+    udpHwdst = findChild<QLineEdit*>(QString("lineEdit_12"),  Qt::FindChildrenRecursively);
+    udpIpsrc = findChild<QLineEdit*>(QString("lineEdit_11"),  Qt::FindChildrenRecursively);
+    udpIpdst = findChild<QLineEdit*>(QString("lineEdit_9"),  Qt::FindChildrenRecursively);
+    udpPortsrc = findChild<QLineEdit*>(QString("lineEdit_13"),  Qt::FindChildrenRecursively);
+    udpPortdst = findChild<QLineEdit*>(QString("lineEdit_14"),  Qt::FindChildrenRecursively);
+    udpPayload = findChild<QPlainTextEdit*>(QString("plainTextEdit"),  Qt::FindChildrenRecursively);
     int column = -1;
     //proto
     packetTable->setColumnWidth(++column, 120);
@@ -83,7 +91,7 @@ void MainWindow::on_radioButton_toggled(bool checked)
 }
 
 unsigned char* ConverMacAddressStringIntoByte
-    (const char *pszMACAddress, unsigned char* pbyAddress)
+(const char *pszMACAddress, unsigned char* pbyAddress)
 {
     for (int iConunter = 0; iConunter < 6; ++iConunter)
     {
@@ -101,7 +109,7 @@ unsigned char* ConverMacAddressStringIntoByte
         ch = tolower (*pszMACAddress);
 
         if ((iConunter < 5 && ch != '-' && ch != ':') ||
-            (iConunter == 5 && ch != '\0' && !isspace (ch)))
+                (iConunter == 5 && ch != '\0' && !isspace (ch)))
         {
             ++pszMACAddress;
 
@@ -148,4 +156,94 @@ void MainWindow::on_pushButton_clicked()
     memcpy(arpRaw->ehternetHeader.h_dest, arpRaw->arpHeader.target_mac, 6);
 
     forceFeed(&netWriter, arpPacket);
+}
+
+
+uint16_t udp_checksum(const void* buff, size_t len, in_addr_t src_addr, in_addr_t dest_addr) {
+    const uint16_t *buf=(uint16_t *)buff;
+    uint16_t *ip_src=(uint16_t *)&src_addr, *ip_dst=(uint16_t *)&dest_addr;
+    uint32_t sum;
+    size_t length=len;
+    sum = 0;
+    while (len > 1)
+    {
+        sum += *buf++;
+
+        if (sum & 0x80000000)
+            sum = (sum & 0xFFFF) + (sum >> 16);
+        len -= 2;
+    }
+    if ( len & 1 )
+        sum += *((uint8_t *)buf);
+    sum += *(ip_src++);
+    sum += *ip_src;
+    sum += *(ip_dst++);
+    sum += *ip_dst;
+    sum += htons(IPPROTO_UDP);
+    sum += htons(length);
+    while (sum >> 16)
+        sum = (sum & 0xFFFF) + (sum >> 16);
+    return ( (uint16_t)(~sum)  );
+}
+
+uint16_t ip_checksum(void* vdata,size_t length) {
+    char* data=(char*)vdata;
+    uint32_t acc=0xffff;
+    for (size_t i=0;i+1<length;i+=2) {
+        uint16_t word;
+        memcpy(&word,data+i,2);
+        acc+=ntohs(word);
+        if (acc>0xffff) {
+            acc-=0xffff;
+        }
+    }
+    if (length&1) {
+        uint16_t word=0;
+        memcpy(&word,data+length-1,1);
+        acc+=ntohs(word);
+        if (acc>0xffff) {
+            acc-=0xffff;
+        }
+    }
+    return htons(~acc);
+}
+
+void MainWindow::on_pushButton_2_clicked() {
+    std::string interface = udpInterface->text().toStdString();
+    std::string hwsrc = udpHwsrc->text().toStdString();
+    std::string hwdst = udpHwdst->text().toStdString();
+    std::string ipsrc = udpIpsrc->text().toStdString();
+    std::string ipdst = udpIpdst->text().toStdString();
+    std::string portsrc = udpPortsrc->text().toStdString();
+    std::string portdst = udpPortdst->text().toStdString();
+    std::string payload = udpPayload->document()->toPlainText().toStdString();
+
+    std::shared_ptr<PcapPacket> udpPacket = std::make_shared<PcapPacket>(PcapPacket::forgeRaw<UDPRaw>(payload.length()));
+    udpPacket->raw->pcapHeader.incl_len = sizeof (ARPRaw) - sizeof (PcapRaw);
+    udpPacket->interface = udpInterface->text().toStdString();
+
+    UDPRaw* udp = (UDPRaw*)udpPacket->raw;
+    ConverMacAddressStringIntoByte(hwsrc.c_str(), udp->ehternetHeader.h_source);
+    ConverMacAddressStringIntoByte(hwdst.c_str(), udp->ehternetHeader.h_dest);
+    udp->ehternetHeader.h_proto = htons(ETHERTYPE_IP);
+
+    udp->ipHeader.ihl = 5;
+    udp->ipHeader.version = 4;
+    udp->ipHeader.tos = 0;
+    udp->ipHeader.tot_len = htons(sizeof(UDPRaw) - sizeof (EthernetRaw) + payload.length());
+    udp->ipHeader.id = htons(300);
+    udp->ipHeader.frag_off =  0x000;
+    udp->ipHeader.ttl = 64;
+    udp->ipHeader.protocol = IPPROTO_UDP;
+    udp->ipHeader.saddr = inet_addr(ipsrc.c_str());
+    udp->ipHeader.daddr = inet_addr(ipdst.c_str());
+
+    udp->udpHeader.source = htons(std::stoi(portsrc));
+    udp->udpHeader.dest = htons(std::stoi(portdst));
+    udp->udpHeader.len = htons(sizeof(UDPRaw) - sizeof (IPRaw) + payload.length());
+
+    udp->udpHeader.check = udp_checksum(udp->ipPayload, ntohs(udp->udpHeader.len), udp->ipHeader.saddr, udp->ipHeader.daddr);
+    udp->ipHeader.check = ip_checksum(udp->ipPayload, ntohs(udp->udpHeader.len));
+
+    forceFeed(&netWriter, udpPacket);
 }

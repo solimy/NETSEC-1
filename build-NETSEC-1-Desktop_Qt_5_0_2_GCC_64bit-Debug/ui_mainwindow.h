@@ -17,6 +17,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QStatusBar>
@@ -66,6 +67,11 @@ public:
     QLabel *label_10;
     QLabel *label_11;
     QLabel *label_12;
+    QLineEdit *lineEdit_13;
+    QLineEdit *lineEdit_14;
+    QLabel *label_13;
+    QLabel *label_14;
+    QPlainTextEdit *plainTextEdit;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -180,7 +186,7 @@ public:
         lineEdit_10->setGeometry(QRect(160, 100, 181, 22));
         pushButton_2 = new QPushButton(tab_4);
         pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setGeometry(QRect(110, 240, 481, 61));
+        pushButton_2->setGeometry(QRect(110, 240, 641, 61));
         label_9 = new QLabel(tab_4);
         label_9->setObjectName(QStringLiteral("label_9"));
         label_9->setGeometry(QRect(110, 100, 52, 21));
@@ -199,6 +205,21 @@ public:
         label_12 = new QLabel(tab_4);
         label_12->setObjectName(QStringLiteral("label_12"));
         label_12->setGeometry(QRect(360, 160, 52, 21));
+        lineEdit_13 = new QLineEdit(tab_4);
+        lineEdit_13->setObjectName(QStringLiteral("lineEdit_13"));
+        lineEdit_13->setGeometry(QRect(660, 100, 91, 22));
+        lineEdit_14 = new QLineEdit(tab_4);
+        lineEdit_14->setObjectName(QStringLiteral("lineEdit_14"));
+        lineEdit_14->setGeometry(QRect(660, 160, 91, 22));
+        label_13 = new QLabel(tab_4);
+        label_13->setObjectName(QStringLiteral("label_13"));
+        label_13->setGeometry(QRect(610, 160, 52, 21));
+        label_14 = new QLabel(tab_4);
+        label_14->setObjectName(QStringLiteral("label_14"));
+        label_14->setGeometry(QRect(610, 100, 52, 21));
+        plainTextEdit = new QPlainTextEdit(tab_4);
+        plainTextEdit->setObjectName(QStringLiteral("plainTextEdit"));
+        plainTextEdit->setGeometry(QRect(810, 100, 431, 201));
         tabWidget_2->addTab(tab_4, QString());
         tabWidget->addTab(tab_2, QString());
         MainWindow->setCentralWidget(centralWidget);
@@ -264,8 +285,13 @@ public:
         lineEdit_11->setText(QApplication::translate("MainWindow", "0.0.0.0", 0));
         lineEdit_12->setText(QApplication::translate("MainWindow", "FF-FF-FF-FF-FF-FF", 0));
         label_10->setText(QApplication::translate("MainWindow", "hwdst", 0));
-        label_11->setText(QApplication::translate("MainWindow", "psrc", 0));
-        label_12->setText(QApplication::translate("MainWindow", "pdst", 0));
+        label_11->setText(QApplication::translate("MainWindow", "ipsrc", 0));
+        label_12->setText(QApplication::translate("MainWindow", "ipdst", 0));
+        lineEdit_13->setText(QApplication::translate("MainWindow", "0", 0));
+        lineEdit_14->setText(QApplication::translate("MainWindow", "0", 0));
+        label_13->setText(QApplication::translate("MainWindow", "portdst", 0));
+        label_14->setText(QApplication::translate("MainWindow", "portsrc", 0));
+        plainTextEdit->setPlainText(QApplication::translate("MainWindow", "~Payload~", 0));
         tabWidget_2->setTabText(tabWidget_2->indexOf(tab_4), QApplication::translate("MainWindow", "UDP", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "packet forging", 0));
     } // retranslateUi
