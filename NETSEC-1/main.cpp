@@ -10,12 +10,19 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    int user = getuid();
 
-    DEBUG::PacketDumper dumper;
-    //dumper.subscribeToFeeder(&w.reader);
+    if (user == 0) {
+        QApplication a(argc, argv);
+        MainWindow w;
+        w.show();
 
-    return a.exec();
+        DEBUG::PacketDumper dumper;
+        //dumper.subscribeToFeeder(&w.reader);
+
+        return a.exec();
+    } else {
+        printf("Need root privileges!\n");
+        return -1;
+    }
 }

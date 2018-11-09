@@ -329,7 +329,7 @@ package: all
 	-echo 'Package: $(TARGET)' > $(TMP_DEB_DIR)/DEBIAN/control
 	-echo 'Version: $(VERSION)' >> $(TMP_DEB_DIR)/DEBIAN/control
 	-echo 'Maintainer: $(MAINTAINER)' >> $(TMP_DEB_DIR)/DEBIAN/control
-	-echo 'Architecture: all' >> $(TMP_DEB_DIR)/DEBIAN/control
+	-echo 'Architecture: amd64' >> $(TMP_DEB_DIR)/DEBIAN/control
 	-echo 'Description: $(DESCRIPTION)' >> $(TMP_DEB_DIR)/DEBIAN/control
 	-echo 'Depends: $(DEPENDENCIES)' >> $(TMP_DEB_DIR)/DEBIAN/control
 	-dpkg-deb --build $(TMP_DEB_DIR)
