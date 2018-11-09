@@ -186,14 +186,25 @@ uint16_t udp_checksum(const void* buff, size_t len, in_addr_t src_addr, in_addr_
     return ( (uint16_t)(~sum)  );
 }
 
-unsigned short ip_checksum(unsigned short* buff, int _16bitword)
+unsigned short ip_checksum(const void* buff, size_t hdr_len)
 {
-    unsigned long sum;
-    for(sum=0;_16bitword>0;_16bitword--)
-        sum+=htons(*(buff)++);
-    sum = ((sum >> 16) + (sum & 0xFFFF));
-    sum += (sum>>16);
-    return (unsigned short)(~sum);
+
+    unsigned long sum = 0;
+    const uint16_t *ip1;
+
+    ip1 = (uint16_t*)buff;
+    while (hdr_len > 1)
+    {
+        sum += *ip1++;
+        if (sum & 0x80000000)
+            sum = (sum & 0xFFFF) + (sum >> 16);
+        hdr_len -= 2;
+    }
+
+    while (sum >> 16)
+        sum = (sum & 0xFFFF) + (sum >> 16);
+
+    return(~sum);
 }
 
 void MainWindow::on_pushButton_2_clicked() {
@@ -207,7 +218,7 @@ void MainWindow::on_pushButton_2_clicked() {
     std::string payload = udpPayload->document()->toPlainText().toStdString();
 
     std::shared_ptr<PcapPacket> udpPacket = std::make_shared<PcapPacket>(PcapPacket::forgeRaw<UDPRaw>(payload.length()));
-    udpPacket->raw->pcapHeader.incl_len = sizeof (ARPRaw) - sizeof (PcapRaw);
+    udpPacket->raw->pcapHeader.incl_len = sizeof (UDPRaw) - sizeof (PcapRaw) + payload.length();
     udpPacket->interface = udpInterface->text().toStdString();
 
     UDPRaw* udp = (UDPRaw*)udpPacket->raw;
@@ -231,9 +242,25 @@ void MainWindow::on_pushButton_2_clicked() {
     udp->udpHeader.len = htons(sizeof(UDPRaw) - sizeof (IPRaw) + payload.length());
 
     memcpy(udp->udpPayload, payload.c_str(), payload.length());
+    std::cout << payload << " : " << payload.length() << std::endl;
+    std::cout << std::hex;
+    for (int i = 0, j = payload.length(); i < j; ++i) {
+        if (std::isprint(udp->udpPayload[i])) {
+            std::cout << udp->udpPayload[i];
+        } else {
+            std::cout << " Ox";
+            std::cout << (short)udp->udpPayload[i];
+            std::cout << " ";
+        }
+    }
+    std::cout << std::endl;
 
     udp->udpHeader.check = udp_checksum(udp->ipPayload, ntohs(udp->udpHeader.len), udp->ipHeader.saddr, udp->ipHeader.daddr);
-    udp->ipHeader.check = ip_checksum((unsigned short*)&udp->ipHeader, (sizeof(struct iphdr)/2));
+    udp->ipHeader.check = ip_checksum((void*)&udp->ipHeader, sizeof(struct iphdr));
+
+    std::cout << std::dec << udpPacket->raw->pcapHeader.incl_len << std::endl;
+    std::cout << sizeof(ethhdr) << " " << sizeof(iphdr) << " " << sizeof(udphdr) << std::endl;
+    std::cout << ntohs(udp->ipHeader.tot_len) << std::endl;
 
     forceFeed(&netWriter, udpPacket);
 }
