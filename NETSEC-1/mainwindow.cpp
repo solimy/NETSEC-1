@@ -186,26 +186,14 @@ uint16_t udp_checksum(const void* buff, size_t len, in_addr_t src_addr, in_addr_
     return ( (uint16_t)(~sum)  );
 }
 
-uint16_t ip_checksum(void* vdata,size_t length) {
-    char* data=(char*)vdata;
-    uint32_t acc=0xffff;
-    for (size_t i=0;i+1<length;i+=2) {
-        uint16_t word;
-        memcpy(&word,data+i,2);
-        acc+=ntohs(word);
-        if (acc>0xffff) {
-            acc-=0xffff;
-        }
-    }
-    if (length&1) {
-        uint16_t word=0;
-        memcpy(&word,data+length-1,1);
-        acc+=ntohs(word);
-        if (acc>0xffff) {
-            acc-=0xffff;
-        }
-    }
-    return htons(~acc);
+unsigned short ip_checksum(unsigned short* buff, int _16bitword)
+{
+    unsigned long sum;
+    for(sum=0;_16bitword>0;_16bitword--)
+        sum+=htons(*(buff)++);
+    sum = ((sum >> 16) + (sum & 0xFFFF));
+    sum += (sum>>16);
+    return (unsigned short)(~sum);
 }
 
 void MainWindow::on_pushButton_2_clicked() {
@@ -242,8 +230,10 @@ void MainWindow::on_pushButton_2_clicked() {
     udp->udpHeader.dest = htons(std::stoi(portdst));
     udp->udpHeader.len = htons(sizeof(UDPRaw) - sizeof (IPRaw) + payload.length());
 
+    memcpy(udp->udpPayload, payload.c_str(), payload.length());
+
     udp->udpHeader.check = udp_checksum(udp->ipPayload, ntohs(udp->udpHeader.len), udp->ipHeader.saddr, udp->ipHeader.daddr);
-    udp->ipHeader.check = ip_checksum(udp->ipPayload, ntohs(udp->udpHeader.len));
+    udp->ipHeader.check = ip_checksum((unsigned short*)&udp->ipHeader, (sizeof(struct iphdr)/2));
 
     forceFeed(&netWriter, udpPacket);
 }
