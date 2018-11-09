@@ -60,6 +60,7 @@ void PacketReader::captureFromFile(std::string const& file) {
             }
         }
     }
+    close(fd);
 }
 
 //TODO
