@@ -46,6 +46,7 @@ STRIP         = strip
 VERSION       = 1.0.0
 MAINTAINER    = solimy,atsukisama
 DESCRIPTION   = netsec packet sniffer project for epitech
+DEPENDENCIES  = libqt5core5a,libqt5dbus5,libqt5gui5,libqt5network5,libqt5svg5,libqt5widgets5,qt5-gtk-platformtheme
 TMP_DEB_DIR   = netsec-$(VERSION)
 
 ####### Output directory
@@ -383,6 +384,7 @@ package: all
 	-echo 'Maintainer: $(MAINTAINER)' >> $(TMP_DEB_DIR)/DEBIAN/control
 	-echo 'Architecture: all' >> $(TMP_DEB_DIR)/DEBIAN/control
 	-echo 'Description: $(DESCRIPTION)' >> $(TMP_DEB_DIR)/DEBIAN/control
+	-echo 'Depends: $(DEPENDENCIES)' >> $(TMP_DEB_DIR)/DEBIAN/control
 	-dpkg-deb --build $(TMP_DEB_DIR)
 
 
